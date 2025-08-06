@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Financial Futures</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'purple-primary': '#6B46C1',
+                        'purple-neon': '#7C3AED',
+                        'cyan-bright': '#06B6D4',
+                        'green-success': '#10B981',
+                        'orange-warning': '#F59E0B',
+                        'dark-bg': '#0F172A'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #6B46C1 100%); }
+        .neon-glow { box-shadow: 0 0 20px rgba(124, 58, 237, 0.5); }
+        .animate-counter { transition: all 0.5s ease-in-out; }
+        .section-fade { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .section-fade.visible { opacity: 1; transform: translateY(0); }
+
+        /* Guided Tour Styles */
+        .tour-guide {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .tour-start-btn {
+            background: linear-gradient(45deg, #8B5CF6, #06B6D4);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 12px 35px rgba(139, 92, 246, 0.6); }
+        }
+
+        .tour-controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            padding: 16px 24px;
+            display: none;
+            align-items: center;
+            gap: 16px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .tour-controls.active {
+            display: flex;
+        }
+
+        .tour-progress {
+            color: #8B5CF6;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .tour-btn {
+            background: linear-gradient(45deg, #8B5CF6, #06B6D4);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tour-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .tour-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .section-highlight {
+            position: relative;
+        }
+
+        .section-highlight::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, #8B5CF6, #06B6D4);
+            border-radius: 20px;
+            opacity: 0.1;
+            animation: highlight-pulse 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes highlight-pulse {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.2; transform: scale(1.02); }
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-white font-inter text-xl leading-relaxed">
+    <!-- Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-2 bg-gray-800 z-50">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-purple-neon to-cyan-bright transition-all duration-300" style="width: 0%"></div>
+    </div>
+
+    <!-- Navigation Sidebar -->
+    <nav class="fixed left-0 top-0 h-full w-64 bg-gray-900/90 backdrop-blur-sm z-40 p-6 hidden lg:block">
+        <div class="space-y-4 mt-8">
+            <h3 class="text-purple-neon font-bold text-lg mb-8">Your Journey</h3>
+            <a href="#hero" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
+                ✨ The Dream
+            </a>
+            <a href="#paul-message" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
+                💝 Paul's Message
+            </a>
+            <a href="#problem" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
+                � The Problem
+            </a>
+            <a href="#solution" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
+                🎯 Smart Solution
+            </a>
+            <a href="#lifestyle" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
+                �️ Your New Life
+            </a>
+            <a href="#how" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
+                🔧 The Numbers
+            </a>
+            <a href="#choice" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
+                🌟 Your Choice
+            </a>
+            <a href="#bonus" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
+                🎁 Bonus Future
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64">
+        <!-- Hero Section - The Dream -->
+        <section id="hero" class="min-h-screen gradient-bg flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-purple-primary/20 to-cyan-bright/20 animate-pulse"></div>
+            <div class="container mx-auto px-6 text-center relative z-10">
+                <div class="mb-8">
+                    <div class="text-6xl mb-4">✨</div>
+                    <h1 class="text-6xl md:text-8xl font-bold mb-8 bg-gradient-to-r from-purple-neon to-cyan-bright bg-clip-text text-transparent">
+                        Imagine Your Perfect Life
+                    </h1>
+                </div>
+                <p class="text-2xl md:text-3xl mb-12 text-gray-300 max-w-4xl mx-auto">
+                    What if money was never a worry again? What if luxury, travel, and family time were just... normal?
+                </p>
+
+                <div class="grid md:grid-cols-3 gap-8 mb-12 max-w-6xl mx-auto">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 neon-glow">
+                        <div class="text-4xl mb-4">🏖️</div>
+                        <h3 class="text-2xl font-bold text-cyan-bright mb-2">Monthly Queensland Trips</h3>
+                        <p class="text-lg text-gray-300">12 round-trip flights per year. Visit whenever you want.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 neon-glow">
+                        <div class="text-4xl mb-4">🛍️</div>
+                        <h3 class="text-2xl font-bold text-green-success mb-2">Shopping Without Limits</h3>
+                        <p class="text-lg text-gray-300">$30,000 annual shopping budget. Buy what you love.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 neon-glow">
+                        <div class="text-4xl mb-4">🏨</div>
+                        <h3 class="text-2xl font-bold text-orange-warning mb-2">Luxury Family Holidays</h3>
+                        <p class="text-lg text-gray-300">Master bedrooms for everyone. No more cramped rentals.</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-green-success/20 to-cyan-bright/20 rounded-2xl p-8 max-w-3xl mx-auto mb-12">
+                    <p class="text-3xl font-bold text-white mb-4">This isn't just a dream...</p>
+                    <p class="text-5xl font-black text-green-success mb-4">It's completely achievable</p>
+                    <p class="text-xl text-gray-300">We have a once-in-a-lifetime opportunity to make this our reality</p>
+                </div>
+
+                <div class="mt-16">
+                    <a href="#paul-message" class="inline-block bg-green-success hover:bg-green-600 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 text-gray-900">
+                        Show Me How
+                    </a>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Paul's Message Section -->
+        <section id="paul-message" class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 py-20">
+            <div class="container mx-auto px-6">
+                <div class="max-w-6xl mx-auto">
+                    <!-- Header -->
+                    <div class="text-center mb-16">
+                        <div class="text-6xl mb-6">💝</div>
+                        <h2 class="text-5xl md:text-6xl font-black mb-8 bg-gradient-to-r from-orange-warning to-red-500 bg-clip-text text-transparent">
+                            A Message from Paul
+                        </h2>
+                        <p class="text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+                            Why this opportunity means everything to our family's future
+                        </p>
+                    </div>
+
+                    <!-- Paul's Personal Message -->
+                    <div class="bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-3xl p-12 mb-16 border-2 border-orange-500/30">
+                        <div class="flex items-start mb-8">
+                            <div class="text-6xl mr-6">👨‍💼</div>
+                            <div>
+                                <h3 class="text-4xl font-bold text-orange-warning mb-4">I Want to Stop Worrying and Start Living</h3>
+                                <p class="text-xl text-gray-300 leading-relaxed">
+                                    I'm obsessed with work because I see the risks on the horizon. AI is coming for my job.
+                                    My finger joints WILL give out from typing. My eyesight will deteriorate.
+                                    <strong class="text-orange-warning">We need to act NOW while I can still earn this much.</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <div class="bg-red-500/20 rounded-xl p-6">
+                                <h4 class="text-2xl font-bold text-red-400 mb-4">😰 What I'm Afraid Of</h4>
+                                <ul class="space-y-3 text-lg text-gray-300">
+                                    <li>• <strong>AI replacing my high-paying job</strong></li>
+                                    <li>• <strong>AI destroying Iraj's tutoring income</strong></li>
+                                    <li>• <strong>Inflation eating Mahnaz's super for 20 years</strong></li>
+                                    <li>• Physical burnout from overwork</li>
+                                    <li>• Missing Lucas's childhood</li>
+                                    <li>• Watching our opportunity slip away</li>
+                                    <li>• Everyone struggling financially forever</li>
+                                </ul>
+                            </div>
+                            <div class="bg-green-500/20 rounded-xl p-6">
+                                <h4 class="text-2xl font-bold text-green-400 mb-4">💚 What I Want to Give You</h4>
+                                <ul class="space-y-3 text-lg text-gray-300">
+                                    <li>• Financial security for life</li>
+                                    <li>• Luxury without guilt or stress</li>
+                                    <li>• Quality time together as a family</li>
+                                    <li>• Generational wealth for Lucas</li>
+                                    <li>• Peace of mind for everyone</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Collaborative Investment Message -->
+                    <div class="bg-gradient-to-r from-purple-primary/20 to-cyan-bright/20 rounded-3xl p-12 mb-16">
+                        <h3 class="text-4xl font-bold text-center text-cyan-bright mb-8">🤝 We're All Contributing to This Success</h3>
+
+                        <div class="grid md:grid-cols-2 gap-12">
+                            <div>
+                                <h4 class="text-3xl font-bold text-purple-neon mb-6">👨‍👩‍👦 Paul & Ana's Contribution</h4>
+                                <div class="space-y-4 text-xl">
+                                    <div class="flex items-start">
+                                        <span class="text-green-success mr-3 text-2xl">💰</span>
+                                        <div>
+                                            <strong>Cash & Income:</strong>
+                                            <p class="text-gray-300 text-lg">$265k annual income + property management</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="text-green-success mr-3 text-2xl">⏰</span>
+                                        <div>
+                                            <strong>Time & Expertise:</strong>
+                                            <p class="text-gray-300 text-lg">Property research, management, financial planning</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="text-green-success mr-3 text-2xl">🎯</span>
+                                        <div>
+                                            <strong>Strategic Vision:</strong>
+                                            <p class="text-gray-300 text-lg">Identifying opportunities, timing the market</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h4 class="text-3xl font-bold text-purple-neon mb-6">👩‍🦳👨‍🦳 Mahnaz & Iraj's Contribution</h4>
+                                <div class="space-y-4 text-xl">
+                                    <div class="flex items-start">
+                                        <span class="text-orange-warning mr-3 text-2xl">🏠</span>
+                                        <div>
+                                            <strong>The Golden Asset:</strong>
+                                            <p class="text-gray-300 text-lg">$1.6M from 52 High Street (perfect timing!)</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="text-orange-warning mr-3 text-2xl">⏳</span>
+                                        <div>
+                                            <strong>Perfect Timing:</strong>
+                                            <p class="text-gray-300 text-lg">Held the property through the right market cycle</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start">
+                                        <span class="text-orange-warning mr-3 text-2xl">🎯</span>
+                                        <div>
+                                            <strong>Strategic Patience:</strong>
+                                            <p class="text-gray-300 text-lg">Waiting for the housing surge to maximize value</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-green-success/30 to-cyan-bright/30 rounded-2xl p-8 mt-8 text-center">
+                            <h4 class="text-3xl font-bold text-white mb-4">🚀 Together We Create Magic</h4>
+                            <p class="text-xl text-gray-200 leading-relaxed">
+                                Paul & Ana's income + expertise + Mahnaz & Iraj's capital =
+                                <strong class="text-yellow-400">Exponential wealth growth for everyone!</strong>
+                            </p>
+                            <p class="text-lg text-gray-300 mt-4">
+                                This isn't dependency - it's a <strong>shared family investment</strong> where everyone contributes and everyone wins.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Paul's Promise -->
+                    <div class="bg-gradient-to-r from-green-success/20 to-yellow-400/20 rounded-3xl p-12 text-center">
+                        <div class="text-6xl mb-6">🤗</div>
+                        <h3 class="text-4xl font-bold text-green-success mb-6">My Promise to Our Family</h3>
+                        <div class="max-w-4xl mx-auto space-y-6 text-xl text-gray-300">
+                            <p class="leading-relaxed">
+                                <strong class="text-green-success">I WANT to take care of everyone financially.</strong>
+                                This isn't a burden - it's my purpose and my joy.
+                            </p>
+                            <p class="leading-relaxed">
+                                Ana and I want to create a family trust where everyone has access to what they need,
+                                when they need it. Monthly transfers, travel budgets, shopping money - whatever makes you happy.
+                            </p>
+                            <p class="leading-relaxed text-2xl font-bold text-yellow-400">
+                                I want to stop being obsessed with work and start being present with my family.
+                                This plan gives us all that freedom.
+                            </p>
+                        </div>
+
+                        <div class="mt-8">
+                            <a href="#current-situation" class="inline-block bg-gradient-to-r from-green-success to-yellow-400 px-8 py-4 rounded-full text-xl font-bold hover:scale-105 transition-transform duration-300 shadow-lg text-gray-900">
+                                Let's See The Numbers
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Your New Lifestyle Section -->
+        <section id="lifestyle" class="min-h-screen bg-gradient-to-br from-green-success/20 to-cyan-bright/20 py-20">
+            <div class="container mx-auto px-6">
+                <div class="section-fade">
+                    <h2 class="text-5xl font-bold text-center mb-16 text-green-success">🏖️ Your New Lifestyle Awaits</h2>
+
+                    <div class="text-center mb-16">
+                        <p class="text-3xl text-white mb-8">Here's exactly what each person gets:</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-12 mb-16">
+                        <!-- Iraj's Benefits -->
+                        <div class="bg-gray-900/80 rounded-2xl p-8 border-2 border-cyan-bright">
+                            <div class="text-center mb-6">
+                                <div class="text-6xl mb-4">👨‍🦳</div>
+                                <h3 class="text-3xl font-bold text-cyan-bright">Iraj's New Life</h3>
+                            </div>
+                            <ul class="space-y-4 text-xl">
+                                <li class="flex items-start">
+                                    <span class="text-cyan-bright mr-3 text-2xl">✈️</span>
+                                    <div>
+                                        <strong>12 flights to Queensland per year</strong>
+                                        <p class="text-gray-300 text-lg">Visit whenever you want - one trip per month if you like</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-cyan-bright mr-3 text-2xl">🏠</span>
+                                    <div>
+                                        <strong>Beautiful apartment rental</strong>
+                                        <p class="text-gray-300 text-lg">Up to $1000/week - choose anywhere you love</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-cyan-bright mr-3 text-2xl">💰</span>
+                                    <div>
+                                        <strong>Plenty of spending money</strong>
+                                        <p class="text-gray-300 text-lg">No financial stress, ever</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-cyan-bright mr-3 text-2xl">🎰</span>
+                                    <div>
+                                        <strong>Maybe even the Mahogany Room again!</strong>
+                                        <p class="text-gray-300 text-lg">Live the life you deserve</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Mahnaz's Benefits -->
+                        <div class="bg-gray-900/80 rounded-2xl p-8 border-2 border-purple-neon">
+                            <div class="text-center mb-6">
+                                <div class="text-6xl mb-4">👩‍🦳</div>
+                                <h3 class="text-3xl font-bold text-purple-neon">Mahnaz's New Life</h3>
+                            </div>
+                            <ul class="space-y-4 text-xl">
+                                <li class="flex items-start">
+                                    <span class="text-purple-neon mr-3 text-2xl">🛍️</span>
+                                    <div>
+                                        <strong>$20,000 annual shopping budget</strong>
+                                        <p class="text-gray-300 text-lg">Buy whatever makes you happy</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-purple-neon mr-3 text-2xl">🏠</span>
+                                    <div>
+                                        <strong>Very nice apartment</strong>
+                                        <p class="text-gray-300 text-lg">Beautiful place to call home</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-purple-neon mr-3 text-2xl">✈️</span>
+                                    <div>
+                                        <strong>Family travel adventures</strong>
+                                        <p class="text-gray-300 text-lg">Luxury holidays with everyone</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-purple-neon mr-3 text-2xl">😌</span>
+                                    <div>
+                                        <strong>Complete peace of mind</strong>
+                                        <p class="text-gray-300 text-lg">Never worry about money again</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Family Benefits -->
+                    <div class="bg-gradient-to-r from-purple-primary to-cyan-bright rounded-2xl p-12 text-center">
+                        <h3 class="text-4xl font-bold text-white mb-8">Plus, Our Whole Family Gets:</h3>
+                        <div class="grid md:grid-cols-3 gap-8 text-white">
+                            <div>
+                                <div class="text-5xl mb-4">🥁</div>
+                                <h4 class="text-2xl font-bold mb-2">Paul's Drum Kit</h4>
+                                <p class="text-lg">He can finally play music again and reduce work stress</p>
+                            </div>
+                            <div>
+                                <div class="text-5xl mb-4">🌍</div>
+                                <h4 class="text-2xl font-bold mb-2">World Travel</h4>
+                                <p class="text-lg">Ana gets to see the world with her family</p>
+                            </div>
+                            <div>
+                                <div class="text-5xl mb-4">👶</div>
+                                <h4 class="text-2xl font-bold mb-2">Lucas's Future</h4>
+                                <p class="text-lg">Generational wealth and opportunities</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+        <!-- The Simple Problem Section -->
+        <section id="problem" class="min-h-screen bg-gradient-to-br from-orange-warning/20 to-red-500/20 py-20">
+            <div class="container mx-auto px-6">
+                <div class="section-fade text-center">
+                    <h2 class="text-5xl font-bold mb-16 text-orange-warning">💡 There's Just One Simple Problem</h2>
+
+                    <div class="max-w-4xl mx-auto">
+                        <div class="bg-gray-900/80 rounded-2xl p-12 mb-12">
+                            <div class="text-8xl mb-8">🏦</div>
+                            <h3 class="text-4xl font-bold text-white mb-8">We're Giving Too Much Money to Banks</h3>
+
+                            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                                <div class="text-center">
+                                    <p class="text-6xl font-black text-red-500 mb-4">$2,830,320</p>
+                                    <p class="text-xl text-gray-300">Total we'll pay banks over time</p>
+                                    <p class="text-lg text-red-400">Money that could buy more properties instead</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-6xl font-black text-orange-warning mb-4">$144,000</p>
+                                    <p class="text-xl text-gray-300">Every single year to banks</p>
+                                    <p class="text-lg text-orange-warning">That's $12,000 every month!</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-red-500/20 rounded-lg p-6">
+                                <p class="text-2xl font-bold text-red-400 mb-4">Think about it this way:</p>
+                                <p class="text-xl text-gray-300">
+                                    It's like giving $170,000 every year to someone you really despise.
+                                    That money could be buying us luxury holidays, shopping, and building wealth for Lucas instead.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Additional Threats -->
+                        <div class="grid md:grid-cols-2 gap-8 mb-12">
+                            <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500/30">
+                                <div class="text-5xl mb-4">📉</div>
+                                <h4 class="text-2xl font-bold text-red-400 mb-4">Mahnaz's Super Crisis</h4>
+                                <div class="space-y-3 text-lg text-gray-300">
+                                    <p><strong class="text-red-400">$200k super</strong> needs to last 20 years</p>
+                                    <p><strong class="text-orange-warning">Inflation</strong> will cut purchasing power in half</p>
+                                    <p><strong class="text-red-400">Reality:</strong> Only $10k/year → $5k/year buying power</p>
+                                    <p class="text-red-400 font-bold">Super will run out in 10-12 years, not 20!</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500/30">
+                                <div class="text-5xl mb-4">🤖</div>
+                                <h4 class="text-2xl font-bold text-red-400 mb-4">Iraj's Income Threat</h4>
+                                <div class="space-y-3 text-lg text-gray-300">
+                                    <p><strong class="text-cyan-bright">AI tutoring</strong> is already here</p>
+                                    <p><strong class="text-orange-warning">ChatGPT, Khan Academy AI</strong> replacing human tutors</p>
+                                    <p><strong class="text-red-400">Timeline:</strong> 2-3 years max before major impact</p>
+                                    <p class="text-red-400 font-bold">Tutoring income will disappear!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- The Compounding Crisis -->
+                        <div class="bg-gradient-to-r from-red-500/30 to-orange-500/30 rounded-2xl p-8 mb-12 border-2 border-red-500">
+                            <h4 class="text-3xl font-bold text-red-400 mb-6 text-center">⚠️ The Perfect Storm</h4>
+                            <div class="grid md:grid-cols-3 gap-6 text-center">
+                                <div>
+                                    <p class="text-2xl font-bold text-red-400 mb-2">Paul's Job at Risk</p>
+                                    <p class="text-lg text-gray-300">AI replacing high-paying tech roles</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-red-400 mb-2">Iraj's Income Gone</p>
+                                    <p class="text-lg text-gray-300">AI tutoring takes over</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-red-400 mb-2">Mahnaz's Super Depleted</p>
+                                    <p class="text-lg text-gray-300">Inflation destroys buying power</p>
+                                </div>
+                            </div>
+                            <p class="text-2xl font-bold text-center text-red-400 mt-6">
+                                Flying solo = Financial disaster for everyone
+                            </p>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-gray-800 to-gray-700 rounded-2xl p-8">
+                            <h4 class="text-3xl font-bold text-white mb-6">But here's the good news...</h4>
+                            <p class="text-2xl text-cyan-bright font-semibold">
+                                This problem has a simple, elegant solution that protects everyone from ALL these threats.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Smart Solution Section -->
+        <section id="solution" class="min-h-screen bg-gradient-to-br from-green-success/20 to-cyan-bright/20 py-20">
+            <div class="container mx-auto px-6">
+                <div class="section-fade text-center">
+                    <h2 class="text-5xl font-bold mb-16 text-green-success">🎯 The Smart Solution</h2>
+
+                    <div class="max-w-5xl mx-auto">
+                        <div class="bg-gradient-to-r from-green-success/30 to-cyan-bright/30 rounded-2xl p-12 mb-12">
+                            <div class="text-8xl mb-8">💡</div>
+                            <h3 class="text-4xl font-bold text-white mb-8">One Simple Change Fixes Everything</h3>
+                            <p class="text-2xl text-gray-300 mb-8">
+                                Instead of everyone buying separate properties and paying separate bank fees...
+                            </p>
+                            <p class="text-3xl font-bold text-cyan-bright">
+                                We work together and eliminate most of our debt in one move.
+                            </p>
+                        </div>
+
+                        <div class="grid md:grid-cols-3 gap-8 mb-12">
+                            <div class="bg-gray-900/80 rounded-2xl p-8 text-center">
+                                <div class="text-5xl mb-4">🏠</div>
+                                <h4 class="text-2xl font-bold text-green-success mb-4">Step 1: Sell High Street</h4>
+                                <p class="text-lg text-gray-300 mb-4">Get $2.0M - $2.1M from the sale</p>
+                                <p class="text-xl font-semibold text-cyan-bright">$1.6M available after paying off debt</p>
+                            </div>
+
+                            <div class="bg-gray-900/80 rounded-2xl p-8 text-center">
+                                <div class="text-5xl mb-4">💰</div>
+                                <h4 class="text-2xl font-bold text-green-success mb-4">Step 2: Pay Off Properties</h4>
+                                <p class="text-lg text-gray-300 mb-4">Use the $1.6M to eliminate debt on our other properties</p>
+                                <p class="text-xl font-semibold text-cyan-bright">From $2.2M debt to just $199k</p>
+                            </div>
+
+                            <div class="bg-gray-900/80 rounded-2xl p-8 text-center">
+                                <div class="text-5xl mb-4">🎉</div>
+                                <h4 class="text-2xl font-bold text-green-success mb-4">Step 3: Enjoy Life</h4>
+                                <p class="text-lg text-gray-300 mb-4">Save $12,606/month in bank fees</p>
+                                <p class="text-xl font-semibold text-cyan-bright">$246k/year for lifestyle</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8">
+                            <h4 class="text-3xl font-bold text-white text-center mb-6">The Beautiful Result:</h4>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div class="text-center">
+                                    <p class="text-5xl font-black text-green-success mb-2">$167,382</p>
+                                    <p class="text-xl text-gray-300">More money every year</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-5xl font-black text-cyan-bright mb-2">$0</p>
+                                    <p class="text-xl text-gray-300">Financial stress</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how" class="min-h-screen bg-gray-900 py-20">
+            <div class="container mx-auto px-6">
+                <div class="section-fade">
+                    <h2 class="text-5xl font-bold text-center mb-16 text-purple-neon">🔧 How It Works (Simple Numbers)</h2>
+
+                    <div class="max-w-6xl mx-auto">
+                        <!-- Before and After Comparison -->
+                        <div class="grid md:grid-cols-2 gap-12 mb-16">
+                            <!-- Before -->
+                            <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500">
+                                <h3 class="text-3xl font-bold text-red-400 text-center mb-8">😰 Before (Current Situation)</h3>
+                                <div class="space-y-6">
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-red-500 mb-2">$2.2M</p>
+                                        <p class="text-lg text-gray-300">Total debt across all properties</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-orange-warning mb-2">$144,000</p>
+                                        <p class="text-lg text-gray-300">Bank fees every year</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-red-400 mb-2">$78,848</p>
+                                        <p class="text-lg text-gray-300">Left over for life across all 4 of use. (less than 20k each) - not including Lucas</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- After -->
+                            <div class="bg-green-success/20 rounded-2xl p-8 border-2 border-green-success">
+                                <h3 class="text-3xl font-bold text-green-success text-center mb-8">🎉 After (Working Together)</h3>
+                                <div class="space-y-6">
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-green-success mb-2">$199k</p>
+                                        <p class="text-lg text-gray-300">Remaining debt (90% eliminated!)</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-cyan-bright mb-2">$14,328</p>
+                                        <p class="text-lg text-gray-300">Bank fees every year</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-green-success mb-2">$246,230</p>
+                                        <p class="text-lg text-gray-300">Available for lifestyle</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- The Magic Formula -->
+                        <div class="bg-gradient-to-r from-purple-primary to-cyan-bright rounded-2xl p-12 text-center text-white mb-16">
+                            <h3 class="text-4xl font-bold mb-8">The Magic Formula</h3>
+                            <div class="text-2xl space-y-4">
+                                <p>Sell 52 High Street for <span class="font-bold text-yellow-300">$2.1M</span></p>
+                                <p>↓</p>
+                                <p>Pay off $400k debt = <span class="font-bold text-green-300">$1.6M available</span></p>
+                                <p>↓</p>
+                                <p>Use $1.6M to eliminate debt on other properties</p>
+                                <p>↓</p>
+                                <p><span class="font-bold text-cyan-300">$167,382 more per year</span> for our family</p>
+                            </div>
+                        </div>
+
+                        <!-- What This Means -->
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <div class="bg-gray-800 rounded-2xl p-8 text-center">
+                                <div class="text-5xl mb-4">🏖️</div>
+                                <h4 class="text-2xl font-bold text-cyan-bright mb-4">For Iraj</h4>
+                                <p class="text-lg text-gray-300">Rent a beautiful apartment anywhere you want. Fly to Queensland monthly. Live comfortably without financial stress.</p>
+                            </div>
+
+                            <div class="bg-gray-800 rounded-2xl p-8 text-center">
+                                <div class="text-5xl mb-4">🛍️</div>
+                                <h4 class="text-2xl font-bold text-purple-neon mb-4">For Mahnaz</h4>
+                                <p class="text-lg text-gray-300">$20k shopping budget, beautiful apartment, luxury family holidays. Never worry about money again.</p>
+                            </div>
+
+                            <div class="bg-gray-800 rounded-2xl p-8 text-center">
+                                <div class="text-5xl mb-4">👨‍👩‍👦</div>
+                                <h4 class="text-2xl font-bold text-green-success mb-4">For Everyone</h4>
+                                <p class="text-lg text-gray-300">Luxury holidays, financial security, and generational wealth for Lucas and future children.</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+        <!-- The Final Choice Section -->
+        <section id="choice" class="min-h-screen gradient-bg py-20">
+            <div class="container mx-auto px-6">
+                <div class="section-fade text-center">
+                    <h2 class="text-6xl font-bold mb-16 bg-gradient-to-r from-purple-neon to-cyan-bright bg-clip-text text-transparent">
+                        🌟 Your Choice Awaits
+                    </h2>
+
+                    <div class="max-w-5xl mx-auto">
+                        <!-- The Two Paths -->
+                        <div class="grid md:grid-cols-2 gap-12 mb-16">
+                            <!-- Path 1: Struggle -->
+                            <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500">
+                                <div class="text-center mb-6">
+                                    <div class="text-6xl mb-4">😰</div>
+                                    <h3 class="text-3xl font-bold text-red-400">Path 1: Go It Alone</h3>
+                                </div>
+                                <div class="space-y-4 text-xl">
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-red-500 mb-2">$78,848</p>
+                                        <p class="text-lg text-gray-300">Total left over per year</p>
+                                    </div>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start">
+                                            <span class="text-red-400 mr-3">💸</span>
+                                            <span>Keep paying banks $144k/year</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-red-400 mr-3">😰</span>
+                                            <span>Constant financial stress</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-red-400 mr-3">✈️</span>
+                                            <span>No luxury travel or experiences</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-red-400 mr-3">👶</span>
+                                            <span>Limited future for Lucas</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Path 2: Thrive -->
+                            <div class="bg-green-success/20 rounded-2xl p-8 border-2 border-green-success neon-glow">
+                                <div class="text-center mb-6">
+                                    <div class="text-6xl mb-4">🌟</div>
+                                    <h3 class="text-3xl font-bold text-green-success">Path 2: Work Together</h3>
+                                </div>
+                                <div class="space-y-4 text-xl">
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-green-success mb-2">$246,230</p>
+                                        <p class="text-lg text-gray-300">Available for lifestyle per year</p>
+                                    </div>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">✈️</span>
+                                            <span>12 flights to Queensland per year</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">🛍️</span>
+                                            <span>$20k shopping budget</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">🏨</span>
+                                            <span>Luxury family holidays</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">💰</span>
+                                            <span>Generational wealth for Lucas</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- The Difference -->
+                        <div class="bg-gradient-to-r from-purple-primary to-cyan-bright rounded-2xl p-12 text-center text-white mb-16">
+                            <h3 class="text-4xl font-bold mb-6">The Annual Difference</h3>
+                            <p class="text-8xl font-black mb-4 counter" data-target="167382">$0</p>
+                            <p class="text-2xl mb-6">More money every year when we work together</p>
+                            <p class="text-xl">That's enough to transform our entire family's future</p>
+                        </div>
+
+                        <!-- What We Need to Do -->
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-12 mb-16">
+                            <h3 class="text-4xl font-bold text-white text-center mb-8">What We Need to Do</h3>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div>
+                                    <h4 class="text-2xl font-bold text-green-success mb-4">For Mahnaz & Iraj:</h4>
+                                    <ul class="space-y-3 text-xl">
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">✓</span>
+                                            Sell 52 High Street for $2.0-2.1M
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">✓</span>
+                                            Rent beautiful apartments (up to $1000/week)
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">✓</span>
+                                            Trust in our shared financial future
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-bold text-cyan-bright mb-4">What You Get:</h4>
+                                    <ul class="space-y-3 text-xl">
+                                        <li class="flex items-start">
+                                            <span class="text-cyan-bright mr-3">🏖️</span>
+                                            Monthly trips to Queensland
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-cyan-bright mr-3">🛍️</span>
+                                            $20k shopping budget
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-cyan-bright mr-3">🏨</span>
+                                            Luxury family holidays
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-cyan-bright mr-3">😌</span>
+                                            Complete peace of mind
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Final Message -->
+                        <div class="text-center">
+                            <p class="text-4xl font-bold text-white mb-6">
+                                This isn't about dependency...
+                            </p>
+                            <p class="text-5xl font-bold text-cyan-bright mb-8">
+                                It's about building something beautiful together.
+                            </p>
+                            <p class="text-2xl text-gray-300 mb-8">
+                                Let's create generational wealth for Lucas and future generations.
+                            </p>
+                            <p class="text-xl text-orange-warning font-semibold">
+                                Time is critical - we must act while this opportunity exists.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bonus Section - The Granny Flat Opportunity -->
+        <section id="bonus" class="min-h-screen bg-gradient-to-br from-yellow-400/20 to-orange-500/20 py-20">
+            <div class="container mx-auto px-6">
+                <div class="section-fade text-center">
+                    <h2 class="text-6xl font-bold mb-16 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+                        🎁 Bonus: It Gets Even Better!
+                    </h2>
+
+                    <div class="max-w-5xl mx-auto">
+                        <!-- Timeline -->
+                        <div class="bg-gradient-to-r from-yellow-400/30 to-orange-500/30 rounded-2xl p-12 mb-16">
+                            <div class="text-8xl mb-8">⏰</div>
+                            <h3 class="text-4xl font-bold text-white mb-8">In Just Two Years...</h3>
+                            <p class="text-2xl text-gray-300 mb-8">
+                                Paul will have between <span class="text-yellow-400 font-bold">$115k - $150k</span> suddenly become available
+                            </p>
+                            <p class="text-xl text-orange-300">
+                                Perfect timing to supercharge our wealth building!
+                            </p>
+                        </div>
+
+                        <!-- The Granny Flat Opportunity -->
+                        <div class="grid md:grid-cols-2 gap-12 mb-16">
+                            <div class="bg-gray-900/80 rounded-2xl p-8">
+                                <div class="text-6xl mb-6 text-center">🏠</div>
+                                <h3 class="text-3xl font-bold mb-6 text-yellow-400 text-center">The Granny Flat</h3>
+                                <ul class="space-y-4 text-xl">
+                                    <li class="flex items-start">
+                                        <span class="text-yellow-400 mr-3">💰</span>
+                                        <div>
+                                            <strong>Easy to build</strong>
+                                            <p class="text-gray-300 text-lg">With $115k-150k available, construction is straightforward</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-yellow-400 mr-3">📈</span>
+                                        <div>
+                                            <strong>$30k additional income per year</strong>
+                                            <p class="text-gray-300 text-lg">Immediate rental income boost</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-yellow-400 mr-3">🚀</span>
+                                        <div>
+                                            <strong>Accelerated debt payoff</strong>
+                                            <p class="text-gray-300 text-lg">Extra income pays down remaining debt REALLY fast</p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-gray-900/80 rounded-2xl p-8">
+                                <div class="text-6xl mb-6 text-center">⚡</div>
+                                <h3 class="text-3xl font-bold mb-6 text-orange-500 text-center">Rapid Debt Elimination</h3>
+                                <div class="space-y-6">
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-orange-500 mb-2">$30k</p>
+                                        <p class="text-lg text-gray-300">Extra income from granny flat</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-3xl font-bold text-yellow-400 mb-2">+</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-4xl font-black text-green-success mb-2">$246k</p>
+                                        <p class="text-lg text-gray-300">Current available income</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-3xl font-bold text-cyan-bright mb-2">=</p>
+                                    </div>
+                                    <div class="text-center bg-gradient-to-r from-green-success/20 to-cyan-bright/20 rounded-lg p-4">
+                                        <p class="text-4xl font-black text-cyan-bright mb-2">$276k</p>
+                                        <p class="text-lg text-gray-300">Total available for lifestyle & debt payoff</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- The Accelerated Timeline -->
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-12 mb-16">
+                            <h3 class="text-4xl font-bold text-white text-center mb-8">The Accelerated Timeline</h3>
+                            <div class="grid md:grid-cols-3 gap-8">
+                                <div class="text-center">
+                                    <div class="text-5xl mb-4">📅</div>
+                                    <h4 class="text-2xl font-bold text-yellow-400 mb-2">Year 1-2</h4>
+                                    <p class="text-lg text-gray-300">Enjoy $246k/year lifestyle while building wealth</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-5xl mb-4">🏗️</div>
+                                    <h4 class="text-2xl font-bold text-orange-500 mb-2">Year 2-3</h4>
+                                    <p class="text-lg text-gray-300">Build granny flat with $115k-150k available funds</p>
+                                </div>
+                                <div class="text-center">
+                                    <div class="text-5xl mb-4">🚀</div>
+                                    <h4 class="text-2xl font-bold text-green-success mb-2">Year 3+</h4>
+                                    <p class="text-lg text-gray-300">$276k/year available - pay off ALL remaining debt rapidly</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- The Ultimate Result -->
+                        <div class="bg-gradient-to-r from-green-success to-cyan-bright rounded-2xl p-12 text-center text-white mb-16">
+                            <h3 class="text-4xl font-bold mb-6">The Ultimate Result</h3>
+                            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                                <div>
+                                    <p class="text-6xl font-black mb-4">$0</p>
+                                    <p class="text-2xl">Total debt across ALL properties</p>
+                                    <p class="text-lg opacity-80">Complete financial freedom</p>
+                                </div>
+                                <div>
+                                    <p class="text-6xl font-black mb-4">$276k+</p>
+                                    <p class="text-2xl">Available every year for pure lifestyle</p>
+                                    <p class="text-lg opacity-80">No debt payments, just living</p>
+                                </div>
+                            </div>
+                            <p class="text-3xl font-bold mb-4">
+                                Within just 2-3 years, we'll own everything outright
+                            </p>
+                            <p class="text-xl opacity-90 mb-6">
+                                Then we can grow the portfolio for as long as we want - buying more properties with pure cash
+                            </p>
+                        </div>
+
+                        <!-- Market Crash Protection -->
+                        <div class="bg-gradient-to-r from-purple-primary/30 to-red-500/30 rounded-2xl p-12 mb-16 border-2 border-red-400">
+                            <div class="text-center mb-8">
+                                <div class="text-8xl mb-4">🛡️</div>
+                                <h3 class="text-4xl font-bold text-white mb-6">CRITICAL ADVANTAGE: Market Crash Protection</h3>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-12">
+                                <div class="bg-red-500/20 rounded-xl p-8">
+                                    <h4 class="text-3xl font-bold text-red-400 mb-6 text-center">❌ With Debt (Most People)</h4>
+                                    <ul class="space-y-4 text-xl">
+                                        <li class="flex items-start">
+                                            <span class="text-red-400 mr-3">💸</span>
+                                            <span>Market crashes = forced to sell at losses</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-red-400 mr-3">🏦</span>
+                                            <span>Banks can demand payment or foreclose</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-red-400 mr-3">😰</span>
+                                            <span>Wealth depends on property valuations</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-red-400 mr-3">📉</span>
+                                            <span>Vulnerable to market downturns</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-green-success/20 rounded-xl p-8">
+                                    <h4 class="text-3xl font-bold text-green-success mb-6 text-center">✅ NO Debt (Our Plan)</h4>
+                                    <ul class="space-y-4 text-xl">
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">🏠</span>
+                                            <span>Market crashes = we keep collecting rent</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">💰</span>
+                                            <span>No banks involved - we own everything</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">📈</span>
+                                            <span>Wealth depends on RENTAL INCOME</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">🛡️</span>
+                                            <span>Completely immune to market crashes</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-12">
+                                <p class="text-3xl font-bold text-white mb-4">
+                                    🔥 IT IS IRRELEVANT IF THE PROPERTY MARKET CRASHES 🔥
+                                </p>
+                                <p class="text-2xl text-yellow-400 mb-6">
+                                    When you have ZERO debt, you just keep collecting rent forever!
+                                </p>
+                                <p class="text-xl text-gray-300">
+                                    People still need places to live - rent keeps flowing regardless of property values
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Job Security Independence -->
+                        <div class="bg-gradient-to-r from-cyan-bright/30 to-green-success/30 rounded-2xl p-12 mb-16 border-2 border-cyan-bright">
+                            <div class="text-center mb-8">
+                                <div class="text-8xl mb-4">🎯</div>
+                                <h3 class="text-4xl font-bold text-white mb-6">Ultimate Freedom: Job Security Independence</h3>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-12 mb-12">
+                                <div class="bg-gray-900/80 rounded-xl p-8">
+                                    <h4 class="text-3xl font-bold text-cyan-bright mb-6 text-center">💼 The AI Threat Reality</h4>
+                                    <ul class="space-y-4 text-xl">
+                                        <li class="flex items-start">
+                                            <span class="text-orange-warning mr-3">⚠️</span>
+                                            <span>AI is coming for high-paying jobs in 2-5 years</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-orange-warning mr-3">😰</span>
+                                            <span>Paul can't adapt and compete forever</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-orange-warning mr-3">💸</span>
+                                            <span>Most families will face financial disaster</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-orange-warning mr-3">🏃</span>
+                                            <span>The rat race never ends for most people</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-green-success/20 rounded-xl p-8">
+                                    <h4 class="text-3xl font-bold text-green-success mb-6 text-center">🏆 Our Family's Future</h4>
+                                    <ul class="space-y-4 text-xl">
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">💰</span>
+                                            <span><strong>$120k/year</strong> from properties alone</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">➕</span>
+                                            <span>Mahnaz's super + Iraj's pension</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">😌</span>
+                                            <span>Paul's job becomes optional, not essential</span>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <span class="text-green-success mr-3">🎯</span>
+                                            <span>Complete financial independence achieved</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="text-center bg-white/10 backdrop-blur-sm rounded-xl p-8">
+                                <p class="text-3xl font-bold text-white mb-6">
+                                    🔥 In Just 2 Years: IT WON'T MATTER IF PAUL LOSES HIS JOB! 🔥
+                                </p>
+                                <p class="text-2xl text-cyan-bright mb-4">
+                                    We'll have $120k+ flowing in from properties every year
+                                </p>
+                                <p class="text-xl text-gray-300 mb-6">
+                                    Plus Mahnaz's super and Iraj's pension - we're completely covered
+                                </p>
+
+                                <!-- The Beautiful Choice -->
+                                <div class="bg-gradient-to-r from-yellow-400/20 to-green-success/20 rounded-lg p-6 mb-6">
+                                    <p class="text-2xl font-bold text-yellow-400 mb-4">💎 The Beautiful Choice We'll Have:</p>
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div class="bg-white/10 rounded-lg p-4">
+                                            <div class="text-3xl mb-2">🏖️</div>
+                                            <p class="text-lg font-bold text-cyan-bright">Option 1: Pure Lifestyle</p>
+                                            <p class="text-base text-gray-300">Spend $246k/year on travel, shopping, experiences</p>
+                                        </div>
+                                        <div class="bg-white/10 rounded-lg p-4">
+                                            <div class="text-3xl mb-2">🏠</div>
+                                            <p class="text-lg font-bold text-green-success">Option 2: Empire Building</p>
+                                            <p class="text-base text-gray-300">Buy a new property in cash every 3-5 years</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-lg text-white mt-4 font-semibold">
+                                        🎉 No more debt servicing EVER! (Ana loves this!)
+                                    </p>
+                                </div>
+                                <div class="grid md:grid-cols-2 gap-8 mt-8">
+                                    <div class="text-center">
+                                        <div class="text-4xl mb-2">👩‍⚕️</div>
+                                        <p class="text-xl font-bold text-white">Ana's Dream</p>
+                                        <p class="text-lg text-gray-300">Can focus on taking care of her parents without financial stress</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <div class="text-4xl mb-2">🏗️</div>
+                                        <p class="text-xl font-bold text-yellow-400">Paul's Dream</p>
+                                        <p class="text-lg text-gray-300">Fulfills his dream of building something amazing for his family</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Wealth Growth Visualization -->
+                        <div class="bg-gray-900/80 rounded-2xl p-12 mb-16">
+                            <h3 class="text-4xl font-bold text-center text-cyan-bright mb-8">📈 The Tale of Two Financial Futures</h3>
+                            <p class="text-xl text-center text-gray-300 mb-8">
+                                See the dramatic difference: Working together creates exponential wealth, flying solo keeps us poor forever
+                            </p>
+
+                            <!-- Toggle for Chart View -->
+                            <div class="flex justify-center mb-8">
+                                <div class="bg-gray-800 rounded-full p-2 flex items-center">
+                                    <button id="chartSoloBtn" class="px-6 py-3 rounded-full text-lg font-semibold transition-all bg-red-500 text-white">
+                                        😰 Flying Solo
+                                    </button>
+                                    <button id="chartTogetherBtn" class="px-6 py-3 rounded-full text-lg font-semibold transition-all text-gray-400">
+                                        🚀 Working Together
+                                    </button>
+                                    <button id="chartBothBtn" class="px-6 py-3 rounded-full text-lg font-semibold transition-all text-gray-400">
+                                        ⚖️ Compare Both
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Chart Container -->
+                            <div id="wealth-chart" class="bg-white rounded-lg p-6 mb-8" style="height: 500px;">
+                                <!-- D3.js chart will be rendered here -->
+                            </div>
+
+                            <!-- Key Numbers Comparison -->
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div class="bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-xl p-6 border-2 border-red-500">
+                                    <h4 class="text-2xl font-bold text-red-400 mb-4 text-center">😰 Flying Solo Reality</h4>
+                                    <div class="space-y-4">
+                                        <div class="text-center">
+                                            <p class="text-3xl font-black text-red-500">$78,848</p>
+                                            <p class="text-sm text-gray-300">Left over per year</p>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-3xl font-black text-orange-warning">$144,000</p>
+                                            <p class="text-sm text-gray-300">Bank fees per year (forever!)</p>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-2xl font-bold text-red-400">$3.6M</p>
+                                            <p class="text-sm text-gray-300">Total bank fees over 25 years</p>
+                                        </div>
+                                        <div class="bg-red-500/20 rounded-lg p-3 text-center">
+                                            <p class="text-lg font-semibold text-red-400">Multiple Income Threats</p>
+                                            <p class="text-sm text-gray-400">AI destroys Paul's & Iraj's jobs</p>
+                                        </div>
+                                        <div class="bg-red-500/20 rounded-lg p-3 text-center">
+                                            <p class="text-lg font-semibold text-red-400">Inflation Crisis</p>
+                                            <p class="text-sm text-gray-400">Mahnaz's super runs out in 10 years</p>
+                                        </div>
+                                        <div class="bg-red-500/20 rounded-lg p-3 text-center">
+                                            <p class="text-lg font-semibold text-red-400">Wealth DECREASES over time</p>
+                                            <p class="text-sm text-gray-400">Properties depreciate, everyone struggles</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-green-success/20 to-cyan-bright/20 rounded-xl p-6 border-2 border-green-success">
+                                    <h4 class="text-2xl font-bold text-green-success mb-4 text-center">🚀 Working Together Success</h4>
+                                    <div class="space-y-4">
+                                        <div class="text-center">
+                                            <p class="text-3xl font-black text-green-success">$246,230</p>
+                                            <p class="text-sm text-gray-300">Available per year</p>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-3xl font-black text-cyan-bright">$14,328</p>
+                                            <p class="text-sm text-gray-300">Bank fees per year (90% reduction!)</p>
+                                        </div>
+                                        <div class="text-center">
+                                            <p class="text-2xl font-bold text-green-success">$15M+</p>
+                                            <p class="text-sm text-gray-300">Net worth after 25 years</p>
+                                        </div>
+                                        <div class="bg-green-success/20 rounded-lg p-3 text-center">
+                                            <p class="text-lg font-semibold text-green-success">Exponential wealth growth</p>
+                                            <p class="text-sm text-gray-400">Properties appreciate, compound returns</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- The Dramatic Difference -->
+                            <div class="bg-gradient-to-r from-purple-primary to-cyan-bright rounded-2xl p-8 text-center text-white mt-8">
+                                <h4 class="text-3xl font-bold mb-4">The 25-Year Difference</h4>
+                                <div class="grid md:grid-cols-3 gap-6">
+                                    <div>
+                                        <p class="text-4xl font-black text-red-400 mb-2">$500k</p>
+                                        <p class="text-lg">Flying Solo Final Net Worth</p>
+                                        <p class="text-sm opacity-75">(Still struggling financially)</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-6xl font-black text-yellow-400 mb-2">VS</p>
+                                        <p class="text-lg">The Choice</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-4xl font-black text-green-400 mb-2">$15M+</p>
+                                        <p class="text-lg">Working Together Net Worth</p>
+                                        <p class="text-sm opacity-75">(Generational wealth achieved)</p>
+                                    </div>
+                                </div>
+                                <p class="text-2xl font-bold mt-6">
+                                    Working together creates <span class="text-yellow-400">30x more wealth!</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Call to Action -->
+                        <div class="text-center">
+                            <p class="text-3xl font-bold text-white mb-6">
+                                This is why timing matters so much...
+                            </p>
+                            <p class="text-2xl text-yellow-400 mb-8">
+                                We're not just solving today's problems - we're building a crash-proof empire.
+                            </p>
+                            <div class="bg-white/10 backdrop-blur-sm rounded-xl p-8 mb-8 max-w-4xl mx-auto">
+                                <p class="text-2xl font-bold text-cyan-bright mb-4">
+                                    🚀 The Growth Never Stops
+                                </p>
+                                <p class="text-xl text-gray-300 mb-4">
+                                    Once we own everything debt-free in 2-3 years, we can keep growing the portfolio forever.
+                                </p>
+                                <p class="text-xl text-gray-300 mb-4">
+                                    Buy more properties with pure cash. Each new property = another $30k+ income stream.
+                                </p>
+                                <p class="text-xl text-yellow-400 font-semibold">
+                                    Market crashes become buying opportunities, not disasters!
+                                </p>
+                            </div>
+                            <p class="text-xl text-gray-300">
+                                Let's start this incredible journey together. The best time was yesterday, the second best time is now.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Guided Tour Elements -->
+    <div id="tour-guide" class="tour-guide">
+        <button id="tour-start-btn" class="tour-start-btn">
+            🎯 Start Guided Tour
+        </button>
+    </div>
+
+    <div id="tour-controls" class="tour-controls">
+        <button id="tour-prev" class="tour-btn">← Previous</button>
+        <div id="tour-progress" class="tour-progress">Step 1 of 7</div>
+        <button id="tour-next" class="tour-btn">Next →</button>
+        <button id="tour-skip" class="tour-btn" style="background: #6B7280; margin-left: 16px;">Skip Tour</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
