@@ -825,4 +825,85 @@ function generateTogetherData() {
     return data;
 }
 
+// Apartment Cost Calculator for Mahnaz
+function initializeApartmentCalculator() {
+    const slider = document.getElementById('apartmentSlider');
+    if (!slider) return;
 
+    // Update display when slider changes
+    slider.addEventListener('input', function() {
+        updateApartmentCalculation(parseInt(this.value));
+    });
+
+    // Initialize with default value
+    updateApartmentCalculation(400000);
+}
+
+function updateApartmentCalculation(apartmentCost) {
+    const houseSaleProceeds = 800000;
+    const superAmount = 200000;
+    const yearsToLast = 20;
+    const monthlyBasics = 1730;
+
+    // Calculate remaining money
+    const leftoverFromSale = houseSaleProceeds - apartmentCost;
+    const totalAvailable = leftoverFromSale + superAmount;
+    const yearlyBudget = totalAvailable / yearsToLast;
+    const monthlyBudget = yearlyBudget / 12;
+    const monthlyLeftover = monthlyBudget - monthlyBasics;
+
+    // Update display elements
+    document.getElementById('apartmentCost').textContent = formatCurrency(apartmentCost);
+    document.getElementById('apartmentCostText').textContent = `$${(apartmentCost/1000)}k for apartment`;
+    document.getElementById('leftoverText').textContent = `$${(leftoverFromSale/1000)}k left`;
+    document.getElementById('totalText').textContent = `$${(totalAvailable/1000)}k total`;
+    document.getElementById('yearlyText').textContent = `$${(totalAvailable/1000)}k ÷ 20 years = $${Math.round(yearlyBudget/1000)}k/year`;
+    document.getElementById('monthlyText').textContent = `$${Math.round(monthlyBudget)}/month`;
+    document.getElementById('leftoverMonthly').textContent = `$${Math.round(monthlyLeftover)}/month left`;
+
+    // Update status message based on monthly leftover
+    updateFinancialStatus(monthlyLeftover, apartmentCost);
+}
+
+function updateFinancialStatus(monthlyLeftover, apartmentCost) {
+    const statusElement = document.getElementById('financialStatus');
+    let message = '';
+    let bgColor = '';
+    let borderColor = '';
+    let textColor = '';
+
+    if (monthlyLeftover < 0) {
+        message = "💸 You're completely broke! Can't even afford basic living expenses. Family will have to support everything.";
+        bgColor = 'bg-red-600/40';
+        borderColor = 'border-red-500';
+        textColor = 'text-red-300';
+    } else if (monthlyLeftover < 200) {
+        message = "😰 You're essentially broke. No money for gifts, dining out, or any emergencies. Completely dependent on family.";
+        bgColor = 'bg-red-500/30';
+        borderColor = 'border-red-500';
+        textColor = 'text-red-300';
+    } else if (monthlyLeftover < 500) {
+        message = "😬 You can barely survive. Maybe one small gift per year for grandkids. No Queensland trips without family paying.";
+        bgColor = 'bg-orange-500/30';
+        borderColor = 'border-orange-500';
+        textColor = 'text-orange-300';
+    } else if (monthlyLeftover < 800) {
+        message = "😐 You have some spending money, but still can't afford Queensland trips or any real luxuries. Very limited lifestyle.";
+        bgColor = 'bg-yellow-500/30';
+        borderColor = 'border-yellow-500';
+        textColor = 'text-yellow-300';
+    } else if (monthlyLeftover < 1200) {
+        message = "🙂 You can afford some small luxuries and maybe one Queensland trip per year if you save up. Still quite limited.";
+        bgColor = 'bg-blue-500/30';
+        borderColor = 'border-blue-500';
+        textColor = 'text-blue-300';
+    } else {
+        message = "😊 You have decent spending money! But this cheap apartment can't host family or grandkids properly.";
+        bgColor = 'bg-green-500/30';
+        borderColor = 'border-green-500';
+        textColor = 'text-green-300';
+    }
+
+    statusElement.className = `${bgColor} rounded-lg p-4 mb-4 border-2 ${borderColor}`;
+    statusElement.innerHTML = `<p class="text-xl font-bold ${textColor}">${message}</p>`;
+}
