@@ -935,6 +935,23 @@ function initializeApartmentCalculator() {
         }
     });
 
+    // Initialize display values to match loaded slider values
+    if (superSlider) {
+        document.getElementById('superAmount').textContent = formatCurrency(parseInt(superSlider.value));
+    }
+
+    // Initialize apartment cost display
+    const apartmentCostValue = parseInt(apartmentSlider.value);
+    document.getElementById('apartmentCost').textContent = apartmentCostValue === 0 ? 'Renting' : formatCurrency(apartmentCostValue);
+
+    // Initialize all expense slider displays
+    expenseSliders.forEach(sliderId => {
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            updateExpenseDisplay(sliderId, parseInt(slider.value));
+        }
+    });
+
     // Initialize with saved/default values
     updateApartmentCalculation();
 }
@@ -1139,6 +1156,18 @@ function initializeIrajCalculator() {
         }
     }
 
+    // Initialize property cost display
+    const propertyCostValue = parseInt(propertySlider.value);
+    document.getElementById('irajPropertyCost').textContent = propertyCostValue === 0 ? 'Renting' : formatCurrency(propertyCostValue);
+
+    // Initialize all expense slider displays
+    expenseSliders.forEach(sliderId => {
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            updateIrajExpenseDisplay(sliderId, parseInt(slider.value));
+        }
+    });
+
     // Initialize with saved/default values
     updateIrajCalculation();
 }
@@ -1170,7 +1199,6 @@ function updateIrajCalculation() {
 
     // Calculate yearly totals for the Available Funds section
     const yearlyPension = pensionIncome * 12;
-    const totalYearlyIncome = yearlyPension + yearlyFromSavings;
     const totalMonthlyIncomeFromPensionAndSavings = (yearlyPension + yearlyFromSavings) / 12;
 
     // Update display elements
@@ -1181,8 +1209,7 @@ function updateIrajCalculation() {
     document.getElementById('irajYearlyText').textContent = `$${(totalSavings/1000)}k ÷ 20 years = $${Math.round(yearlyFromSavings/1000)}k/year`;
 
     // Update the new Available Funds elements
-    document.getElementById('irajTotalYearlyIncome').textContent = `$${Math.round(totalYearlyIncome/1000)}k/year total`;
-    document.getElementById('irajTotalMonthlyIncome').textContent = `$${Math.round(totalMonthlyIncomeFromPensionAndSavings)}/month total income`;
+    document.getElementById('irajTotalMonthlyIncome').textContent = `$${Math.round(totalMonthlyIncomeFromPensionAndSavings).toLocaleString()}/month total income`;
 
     document.getElementById('irajTotalBasics').textContent = `$${monthlyBasics}`;
     document.getElementById('irajLeftoverMonthly').textContent = `$${Math.round(monthlyLeftover)}`;

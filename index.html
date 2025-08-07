@@ -98,6 +98,29 @@
             box-sizing: border-box;
         }
 
+        /* Animated highlight text */
+        .animated-highlight {
+            background: linear-gradient(45deg, #F59E0B, #EF4444, #10B981, #06B6D4, #8B5CF6, #F59E0B);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: colorWave 3s ease-in-out infinite, textPulse 2s ease-in-out infinite alternate;
+            font-weight: 800;
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+        }
+
+        @keyframes colorWave {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes textPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.02); }
+        }
+
 
     </style>
 </head>
@@ -235,37 +258,52 @@
             <div class="container mx-auto px-6">
                 <div class="section-fade text-center">
                     <h2 class="text-5xl font-bold mb-16 text-orange-warning">🚧 What's Standing In Our Way?</h2>
-
+                    <p>In this section, I want to make it clear how bleak our futures will be if we don't take action.</p>
                     <div class="w-full max-w-7xl mx-auto">
 
 
-                        <div class="bg-gray-900/80 rounded-2xl p-12 mb-12">
-                            <div class="text-8xl mb-8">🏦</div>
-                            <h3 class="text-4xl font-bold text-white mb-8">But Instead, We're Giving Too Much Money to Banks</h3>
+                        <div class="bg-gray-900/80 rounded-2xl p-6 sm:p-8 md:p-12 mb-12">
+                            <div class="text-6xl sm:text-7xl md:text-8xl mb-6 sm:mb-8">🏦</div>
+                            <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 sm:mb-8">We're Giving Too Much Money to Banks</h3>
 
                             <div class="grid md:grid-cols-2 gap-8 mb-8">
                                 <div class="text-center">
-                                    <p class="text-6xl font-black text-red-500 mb-4">$2,830,320</p>
-                                    <p class="text-xl text-gray-300">Total we'll pay banks over time</p>
-                                    <p class="text-lg text-red-400">Money that could buy more properties instead</p>
+                                    <p class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-red-500 mb-4">$2,830,320</p>
+                                    <p class="text-lg sm:text-xl text-gray-300">Total we'll pay banks over time</p>
+                                    <p class="text-sm sm:text-lg text-red-400">Money that could buy more properties instead</p>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-6xl font-black text-orange-warning mb-4">$144,000</p>
-                                    <p class="text-xl text-gray-300">Every single year to banks</p>
-                                    <p class="text-lg text-orange-warning">That's $12,000 every month!</p>
+                                    <p class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-orange-warning mb-4">$144,000</p>
+                                    <p class="text-lg sm:text-xl text-gray-300">Every single year to banks</p>
+                                    <p class="text-sm sm:text-lg text-orange-warning">That's $12,000 every month!</p>
                                 </div>
                             </div>
 
-                            <div class="bg-red-500/20 rounded-lg p-6">
-                                <p class="text-2xl font-bold text-red-400 mb-4">Think about it this way:</p>
-                                <p class="text-xl text-gray-300">
+                            <div class="bg-red-500/20 rounded-lg p-4 sm:p-6">
+                                <p class="text-xl sm:text-2xl font-bold text-red-400 mb-4">Think about it this way:</p>
+                                <p class="text-lg sm:text-xl text-gray-300">
                                     It's like giving $170,000 every year to someone you really despise.
                                     That money could be buying us luxury holidays, shopping, and building wealth for Lucas instead.
+                                </p>
+                                <br/>
+                                <p>
+                                    <b class="animated-highlight">
+                                        If Paul and Ana are going to be giving $120,000 to the bank each year anyways - we'd rather split it and spend it on a much better lifestyle!
+                                    </b>
                                 </p>
                             </div>
                         </div>
 
-                        <!-- Additional Threats -->
+                        <!-- Financial Reality Check -->
+                        <div class="text-center mb-8">
+                            <h3 class="text-3xl font-bold text-orange-warning mb-4">Let's have a look at your financial positions...</h3>
+                            <p class="text-xl text-gray-300 max-w-4xl mx-auto">
+                                Use these interactive calculators to see exactly how much money you'll have each month in retirement.
+                                Adjust the sliders to explore different scenarios and see the real impact on your lifestyle.
+                            </p>
+                        </div>
+
+                        <!-- Financial Reality Calculators -->
                         <div class="space-y-8 mb-12">
                             <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500/30">
                                 <div class="text-5xl mb-4">📉</div>
@@ -307,11 +345,40 @@
                                     </div>
                                 </div>
 
-                                <!-- Dynamic Financial Breakdown -->
-                                <div class="space-y-3 text-lg text-gray-300 mb-4">
-                                    <p><strong class="text-cyan-bright">$800k from house sale</strong> → <strong class="text-orange-warning" id="apartmentCostText">$400k for apartment</strong></p>
-                                    <p><strong class="text-red-400" id="leftoverText">$400k left</strong> + <strong class="text-red-400" id="superText">$200k super</strong> = <strong id="totalText">$600k total</strong></p>
-                                    <p><strong class="text-orange-warning" id="yearlyText">$600k ÷ 20 years = $30k/year</strong> = <strong class="text-red-400" id="monthlyText">$2,500/month</strong></p>
+                                <!-- Available Funds Summary -->
+                                <div class="space-y-3 mb-4">
+                                    <!-- House Sale Funds -->
+                                    <div class="bg-cyan-500/10 rounded-lg p-3 border border-cyan-500/20">
+                                        <div class="text-center">
+                                            <div class="text-lg font-semibold text-cyan-bright">House Sale Proceeds</div>
+                                            <div class="text-sm text-gray-300 mb-1">
+                                                $800k → <span class="text-orange-warning" id="apartmentCostText">$400k for apartment</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Total Available Funds -->
+                                    <div class="bg-purple-500/10 rounded-lg p-3 border border-purple-500/20">
+                                        <div class="text-center">
+                                            <div class="text-lg font-semibold text-purple-300">Total Available Funds</div>
+                                            <div class="text-sm text-gray-300 mb-1">
+                                                <span class="text-red-400" id="leftoverText">$400k left</span> +
+                                                <span class="text-red-400" id="superText">$200k super</span>
+                                            </div>
+                                            <div class="text-lg font-bold" id="totalText">$600k total</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Monthly Income -->
+                                    <div class="bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-lg p-4 border-2 border-orange-500/30">
+                                        <div class="text-center">
+                                            <div class="text-sm text-gray-300 mb-1">
+                                                <span class="text-orange-warning" id="yearlyText">$600k ÷ 20 years = $30k/year</span>
+                                            </div>
+                                            <div class="text-xl font-bold text-red-400" id="monthlyText">$2,500/month</div>
+                                            <div class="text-xs text-gray-400">available for living expenses</div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="bg-red-600/30 rounded-lg p-4 mb-4">
@@ -489,13 +556,46 @@
 
                                 <!-- Available Funds Summary -->
                                 <div class="bg-blue-600/20 rounded-lg p-4 mb-4">
-                                    <h5 class="text-lg font-bold text-blue-300 mb-3">Available Funds</h5>
-                                    <div class="space-y-2 text-gray-300">
-                                        <p><strong class="text-green-400">$2,200/month pension</strong> - Government pension (guaranteed)</p>
-                                        <p><strong class="text-cyan-bright">$800k from house sale</strong> + <strong class="text-green-400">$60k deposit return</strong> = <strong class="text-blue-300">$860k total</strong></p>
-                                        <p><strong class="text-red-400" id="irajLeftoverText">$460k left after property</strong> + <strong class="text-purple-300" id="irajSuperText">$25k super</strong> = <strong id="irajTotalText">$485k total savings</strong></p>
-                                        <p><strong class="text-orange-warning" id="irajYearlyText">$485k ÷ 20 years = $24k/year</strong> + <strong class="text-green-400">$26k/year pension</strong> = <strong class="text-blue-300" id="irajTotalYearlyIncome">$50k/year total</strong></p>
-                                        <p><strong class="text-green-400" id="irajTotalMonthlyIncome">$4,167/month total income</strong> from pension + savings</p>
+                                    <h5 class="text-lg font-bold text-blue-300 mb-4">Available Funds</h5>
+
+                                    <!-- Guaranteed Income -->
+                                    <div class="bg-green-500/10 rounded-lg p-3 mb-3 border border-green-500/20">
+                                        <div class="text-center">
+                                            <div class="text-xl font-bold text-green-400">$2,200/month</div>
+                                            <div class="text-sm text-gray-300">Government pension (guaranteed)</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Property Sale Funds -->
+                                    <div class="bg-cyan-500/10 rounded-lg p-3 mb-3 border border-cyan-500/20">
+                                        <div class="text-center">
+                                            <div class="text-lg font-semibold text-cyan-bright">House Sale + Deposit</div>
+                                            <div class="text-sm text-gray-300 mb-1">$800k + $60k = <span class="text-blue-300 font-bold">$860k total</span></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Savings Calculation -->
+                                    <div class="bg-purple-500/10 rounded-lg p-3 mb-3 border border-purple-500/20">
+                                        <div class="text-center">
+                                            <div class="text-lg font-semibold text-purple-300">After Property Purchase</div>
+                                            <div class="text-sm text-gray-300 mb-1">
+                                                <span class="text-red-400" id="irajLeftoverText">$460k left</span> +
+                                                <span class="text-purple-300" id="irajSuperText">$25k super</span>
+                                            </div>
+                                            <div class="text-lg font-bold" id="irajTotalText">$485k total savings</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Final Monthly Income -->
+                                    <div class="bg-gradient-to-r from-green-500/20 to-blue-500/20 rounded-lg p-4 border-2 border-green-500/30">
+                                        <div class="text-center">
+                                            <div class="text-sm text-gray-300 mb-1">
+                                                <span class="text-orange-warning" id="irajYearlyText">$24k/year from savings</span> +
+                                                <span class="text-green-400">$26k/year pension</span>
+                                            </div>
+                                            <div class="text-xl font-bold text-green-400" id="irajTotalMonthlyIncome">$4,167/month total income</div>
+                                            <div class="text-xs text-gray-400">from pension + savings</div>
+                                        </div>
                                     </div>
                                 </div>
 
