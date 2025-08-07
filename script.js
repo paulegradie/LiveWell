@@ -1,5 +1,32 @@
 // Financial Strategy Planning - Interactive JavaScript
 
+// Cookie utility functions
+function setCookie(name, value, days = 30) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+function saveSliderState(sliderId, value) {
+    setCookie(`slider_${sliderId}`, value);
+}
+
+function loadSliderState(sliderId, defaultValue) {
+    const savedValue = getCookie(`slider_${sliderId}`);
+    return savedValue ? parseInt(savedValue) : defaultValue;
+}
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initializeNavigation();
@@ -13,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeTableHoverEffects();
     initializeVisualEffects();
     initializeApartmentCalculator();
+    initializeIrajCalculator();
 });
 
 // Navigation functionality
@@ -330,6 +358,15 @@ function initializeWealthChart() {
 
     // Render initial chart
     renderWealthChart();
+
+    // Add resize listener for responsive chart
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            renderWealthChart();
+        }, 250);
+    });
 }
 
 function switchChartView(view) {
@@ -368,9 +405,19 @@ function renderWealthChart() {
     // Clear existing content
     chartContainer.innerHTML = '';
 
-    // Chart dimensions
-    const margin = { top: 40, right: 100, bottom: 80, left: 100 };
-    const width = chartContainer.offsetWidth - margin.left - margin.right;
+    // Chart dimensions - responsive margins for smaller screens
+    const containerWidth = chartContainer.offsetWidth;
+    const isSmallScreen = containerWidth < 600;
+
+    const margin = {
+        top: 40,
+        right: isSmallScreen ? 50 : 100,
+        bottom: 80,
+        left: isSmallScreen ? 60 : 100
+    };
+
+    // Ensure minimum width and prevent overflow
+    const width = Math.max(300, containerWidth - margin.left - margin.right);
     const height = 450 - margin.top - margin.bottom;
 
     // Create SVG
@@ -827,23 +874,81 @@ function generateTogetherData() {
 
 // Apartment Cost Calculator for Mahnaz
 function initializeApartmentCalculator() {
-    const slider = document.getElementById('apartmentSlider');
-    if (!slider) return;
+    const apartmentSlider = document.getElementById('apartmentSlider');
+    const superSlider = document.getElementById('superSlider');
 
-    // Update display when slider changes
-    slider.addEventListener('input', function() {
-        updateApartmentCalculation(parseInt(this.value));
+    if (!apartmentSlider) return;
+
+    // All expense sliders
+    const expenseSliders = [
+        'groceriesSlider', 'councilSlider', 'utilitiesSlider', 'bodycorpSlider',
+        'insuranceSlider', 'phoneSlider', 'medicalSlider', 'transportSlider'
+    ];
+
+    // Load saved values and set sliders
+    apartmentSlider.value = loadSliderState('apartmentSlider', 400000);
+    if (superSlider) {
+        superSlider.value = loadSliderState('superSlider', 200000);
+    }
+
+    expenseSliders.forEach(sliderId => {
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            const defaultValues = {
+                'groceriesSlider': 400,
+                'councilSlider': 200,
+                'utilitiesSlider': 150,
+                'bodycorpSlider': 300,
+                'insuranceSlider': 100,
+                'phoneSlider': 80,
+                'medicalSlider': 200,
+                'transportSlider': 150
+            };
+            slider.value = loadSliderState(sliderId, defaultValues[sliderId]);
+        }
     });
 
-    // Initialize with default value
-    updateApartmentCalculation(400000);
+    // Update display when apartment slider changes
+    apartmentSlider.addEventListener('input', function() {
+        saveSliderState('apartmentSlider', this.value);
+        updateApartmentCalculation();
+    });
+
+    // Update display when super slider changes
+    if (superSlider) {
+        superSlider.addEventListener('input', function() {
+            saveSliderState('superSlider', this.value);
+            document.getElementById('superAmount').textContent = formatCurrency(parseInt(this.value));
+            updateApartmentCalculation();
+        });
+    }
+
+    // Add event listeners to all expense sliders
+    expenseSliders.forEach(sliderId => {
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            slider.addEventListener('input', function() {
+                saveSliderState(sliderId, this.value);
+                updateExpenseDisplay(sliderId, parseInt(this.value));
+                updateApartmentCalculation();
+            });
+        }
+    });
+
+    // Initialize with saved/default values
+    updateApartmentCalculation();
 }
 
-function updateApartmentCalculation(apartmentCost) {
+function updateApartmentCalculation() {
     const houseSaleProceeds = 800000;
-    const superAmount = 200000;
     const yearsToLast = 20;
-    const monthlyBasics = 1730;
+
+    // Get current slider values
+    const apartmentCost = parseInt(document.getElementById('apartmentSlider').value);
+    const superAmount = parseInt(document.getElementById('superSlider')?.value || 200000);
+
+    // Calculate monthly basics from all expense sliders
+    const monthlyBasics = calculateMonthlyBasics();
 
     // Calculate remaining money
     const leftoverFromSale = houseSaleProceeds - apartmentCost;
@@ -853,16 +958,43 @@ function updateApartmentCalculation(apartmentCost) {
     const monthlyLeftover = monthlyBudget - monthlyBasics;
 
     // Update display elements
-    document.getElementById('apartmentCost').textContent = formatCurrency(apartmentCost);
-    document.getElementById('apartmentCostText').textContent = `$${(apartmentCost/1000)}k for apartment`;
+    document.getElementById('apartmentCost').textContent = apartmentCost === 0 ? 'Renting' : formatCurrency(apartmentCost);
+    document.getElementById('apartmentCostText').textContent = apartmentCost === 0 ? 'Renting (no purchase)' : `$${(apartmentCost/1000)}k for apartment`;
     document.getElementById('leftoverText').textContent = `$${(leftoverFromSale/1000)}k left`;
+    document.getElementById('superText').textContent = `$${(superAmount/1000)}k super`;
     document.getElementById('totalText').textContent = `$${(totalAvailable/1000)}k total`;
     document.getElementById('yearlyText').textContent = `$${(totalAvailable/1000)}k ÷ 20 years = $${Math.round(yearlyBudget/1000)}k/year`;
     document.getElementById('monthlyText').textContent = `$${Math.round(monthlyBudget)}/month`;
-    document.getElementById('leftoverMonthly').textContent = `$${Math.round(monthlyLeftover)}/month left`;
+    document.getElementById('totalBasics').textContent = `$${monthlyBasics}`;
+    document.getElementById('leftoverMonthly').textContent = `$${Math.round(monthlyLeftover)}`;
 
     // Update status message based on monthly leftover
     updateFinancialStatus(monthlyLeftover, apartmentCost);
+}
+
+function calculateMonthlyBasics() {
+    const expenses = [
+        'groceriesSlider', 'councilSlider', 'utilitiesSlider', 'bodycorpSlider',
+        'insuranceSlider', 'phoneSlider', 'medicalSlider', 'transportSlider'
+    ];
+
+    let total = 0;
+    expenses.forEach(sliderId => {
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            total += parseInt(slider.value);
+        }
+    });
+
+    return total;
+}
+
+function updateExpenseDisplay(sliderId, value) {
+    const valueId = sliderId.replace('Slider', 'Value');
+    const element = document.getElementById(valueId);
+    if (element) {
+        element.textContent = `$${value}`;
+    }
 }
 
 function updateFinancialStatus(monthlyLeftover, apartmentCost) {
@@ -902,6 +1034,248 @@ function updateFinancialStatus(monthlyLeftover, apartmentCost) {
         bgColor = 'bg-green-500/30';
         borderColor = 'border-green-500';
         textColor = 'text-green-300';
+    }
+
+    statusElement.className = `${bgColor} rounded-lg p-4 mb-4 border-2 ${borderColor}`;
+    statusElement.innerHTML = `<p class="text-xl font-bold ${textColor}">${message}</p>`;
+}
+
+// Iraj's Financial Calculator
+function initializeIrajCalculator() {
+    const propertySlider = document.getElementById('irajPropertySlider');
+    const superSlider = document.getElementById('irajSuperSlider');
+    const tutoringSlider = document.getElementById('irajTutoringSlider');
+
+    if (!propertySlider) return;
+
+    // All expense sliders for Iraj
+    const expenseSliders = [
+        'irajFoodSlider', 'irajCouncilSlider', 'irajUtilitiesSlider', 'irajBodycorpSlider',
+        'irajInsuranceSlider', 'irajPhoneSlider', 'irajMedicalSlider', 'irajTransportSlider'
+    ];
+
+    // Load saved values and set sliders
+    propertySlider.value = loadSliderState('irajPropertySlider', 400000);
+    if (superSlider) {
+        superSlider.value = loadSliderState('irajSuperSlider', 25000);
+    }
+    if (tutoringSlider) {
+        tutoringSlider.value = loadSliderState('irajTutoringSlider', 960);
+    }
+
+    expenseSliders.forEach(sliderId => {
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            const defaultValues = {
+                'irajFoodSlider': 400,
+                'irajCouncilSlider': 200,
+                'irajUtilitiesSlider': 150,
+                'irajBodycorpSlider': 300,
+                'irajInsuranceSlider': 100,
+                'irajPhoneSlider': 80,
+                'irajMedicalSlider': 200,
+                'irajTransportSlider': 150
+            };
+            slider.value = loadSliderState(sliderId, defaultValues[sliderId]);
+        }
+    });
+
+    // Update display when property slider changes
+    propertySlider.addEventListener('input', function() {
+        saveSliderState('irajPropertySlider', this.value);
+        updateIrajCalculation();
+    });
+
+    // Update display when super slider changes
+    if (superSlider) {
+        superSlider.addEventListener('input', function() {
+            saveSliderState('irajSuperSlider', this.value);
+            document.getElementById('irajSuperAmount').textContent = formatCurrency(parseInt(this.value));
+            updateIrajCalculation();
+        });
+    }
+
+    // Update display when tutoring slider changes
+    if (tutoringSlider) {
+        tutoringSlider.addEventListener('input', function() {
+            const tutoringValue = parseInt(this.value);
+            saveSliderState('irajTutoringSlider', this.value);
+            document.getElementById('irajTutoringValue').textContent = `$${tutoringValue}`;
+
+            // Show/hide AI warning based on tutoring income
+            const aiWarning = document.getElementById('aiWarning');
+            if (aiWarning) {
+                aiWarning.style.display = tutoringValue > 0 ? 'block' : 'none';
+            }
+
+            updateIrajCalculation();
+        });
+    }
+
+    // Add event listeners to all expense sliders
+    expenseSliders.forEach(sliderId => {
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            slider.addEventListener('input', function() {
+                saveSliderState(sliderId, this.value);
+                updateIrajExpenseDisplay(sliderId, parseInt(this.value));
+                updateIrajCalculation();
+            });
+        }
+    });
+
+    // Initialize display values to match loaded slider values
+    if (superSlider) {
+        document.getElementById('irajSuperAmount').textContent = formatCurrency(parseInt(superSlider.value));
+    }
+    if (tutoringSlider) {
+        const tutoringValue = parseInt(tutoringSlider.value);
+        document.getElementById('irajTutoringValue').textContent = `$${tutoringValue}`;
+
+        // Show/hide AI warning based on tutoring income
+        const aiWarning = document.getElementById('aiWarning');
+        if (aiWarning) {
+            aiWarning.style.display = tutoringValue > 0 ? 'block' : 'none';
+        }
+    }
+
+    // Initialize with saved/default values
+    updateIrajCalculation();
+}
+
+function updateIrajCalculation() {
+    const houseSaleProceeds = 800000;
+    const depositReturn = 60000;
+    const totalAvailable = houseSaleProceeds + depositReturn;
+    const yearsToLast = 20;
+    const pensionIncome = 2200; // Fixed monthly pension
+
+    // Get current slider values
+    const propertyCost = parseInt(document.getElementById('irajPropertySlider').value);
+    const superAmount = parseInt(document.getElementById('irajSuperSlider')?.value || 25000);
+    const tutoringIncome = parseInt(document.getElementById('irajTutoringSlider')?.value || 960);
+
+    // Calculate monthly basics from all expense sliders
+    const monthlyBasics = calculateIrajMonthlyBasics();
+
+    // Calculate remaining money after property purchase
+    const leftoverFromSale = totalAvailable - propertyCost;
+    const totalSavings = leftoverFromSale + superAmount;
+    const yearlyFromSavings = totalSavings / yearsToLast;
+    const monthlyFromSavings = yearlyFromSavings / 12;
+
+    // Total monthly income
+    const totalMonthlyIncome = pensionIncome + tutoringIncome + monthlyFromSavings;
+    const monthlyLeftover = totalMonthlyIncome - monthlyBasics;
+
+    // Calculate yearly totals for the Available Funds section
+    const yearlyPension = pensionIncome * 12;
+    const totalYearlyIncome = yearlyPension + yearlyFromSavings;
+    const totalMonthlyIncomeFromPensionAndSavings = (yearlyPension + yearlyFromSavings) / 12;
+
+    // Update display elements
+    document.getElementById('irajPropertyCost').textContent = propertyCost === 0 ? 'Renting' : formatCurrency(propertyCost);
+    document.getElementById('irajLeftoverText').textContent = `$${(leftoverFromSale/1000)}k left after property`;
+    document.getElementById('irajSuperText').textContent = `$${(superAmount/1000)}k super`;
+    document.getElementById('irajTotalText').textContent = `$${(totalSavings/1000)}k total savings`;
+    document.getElementById('irajYearlyText').textContent = `$${(totalSavings/1000)}k ÷ 20 years = $${Math.round(yearlyFromSavings/1000)}k/year`;
+
+    // Update the new Available Funds elements
+    document.getElementById('irajTotalYearlyIncome').textContent = `$${Math.round(totalYearlyIncome/1000)}k/year total`;
+    document.getElementById('irajTotalMonthlyIncome').textContent = `$${Math.round(totalMonthlyIncomeFromPensionAndSavings)}/month total income`;
+
+    document.getElementById('irajTotalBasics').textContent = `$${monthlyBasics}`;
+    document.getElementById('irajLeftoverMonthly').textContent = `$${Math.round(monthlyLeftover)}`;
+
+    // Update status message based on monthly leftover and tutoring income
+    updateIrajFinancialStatus(monthlyLeftover, tutoringIncome, propertyCost);
+}
+
+function calculateIrajMonthlyBasics() {
+    const expenses = [
+        'irajFoodSlider', 'irajCouncilSlider', 'irajUtilitiesSlider', 'irajBodycorpSlider',
+        'irajInsuranceSlider', 'irajPhoneSlider', 'irajMedicalSlider', 'irajTransportSlider'
+    ];
+
+    let total = 0;
+    expenses.forEach(sliderId => {
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            total += parseInt(slider.value);
+        }
+    });
+
+    return total;
+}
+
+function updateIrajExpenseDisplay(sliderId, value) {
+    const valueId = sliderId.replace('Slider', 'Value');
+    const element = document.getElementById(valueId);
+    if (element) {
+        element.textContent = `$${value}`;
+    }
+}
+
+function updateIrajFinancialStatus(monthlyLeftover, tutoringIncome, propertyCost) {
+    const statusElement = document.getElementById('irajFinancialStatus');
+    let message = '';
+    let bgColor = '';
+    let borderColor = '';
+    let textColor = '';
+
+    // Consider the impact of tutoring income loss
+    const monthlyLeftoverWithoutTutoring = monthlyLeftover - tutoringIncome;
+
+    if (tutoringIncome > 0) {
+        // Still has tutoring income
+        if (monthlyLeftover > 2000) {
+            message = `💰 You're very comfortable now with $${Math.round(monthlyLeftover)}/month leftover. But when AI eliminates tutoring (-$${tutoringIncome}/month), you'll only have $${Math.round(monthlyLeftoverWithoutTutoring)}/month!`;
+            bgColor = 'bg-yellow-500/30';
+            borderColor = 'border-yellow-500';
+            textColor = 'text-yellow-300';
+        } else if (monthlyLeftover > 1000) {
+            message = `😐 You're doing okay now, but when tutoring income disappears, you'll struggle with only $${Math.round(monthlyLeftoverWithoutTutoring)}/month leftover.`;
+            bgColor = 'bg-orange-500/30';
+            borderColor = 'border-orange-500';
+            textColor = 'text-orange-300';
+        } else {
+            message = `😬 You're already tight with money. When AI eliminates tutoring, you'll be in serious trouble!`;
+            bgColor = 'bg-red-500/30';
+            borderColor = 'border-red-500';
+            textColor = 'text-red-300';
+        }
+    } else {
+        // No tutoring income (AI has taken over)
+        if (monthlyLeftoverWithoutTutoring < 0) {
+            message = "💸 You're broke! Can't afford basic living expenses without family support.";
+            bgColor = 'bg-red-600/40';
+            borderColor = 'border-red-500';
+            textColor = 'text-red-300';
+        } else if (monthlyLeftoverWithoutTutoring < 500) {
+            message = "😰 You're struggling financially. Very limited lifestyle, dependent on family for extras.";
+            bgColor = 'bg-red-500/30';
+            borderColor = 'border-red-500';
+            textColor = 'text-red-300';
+        } else if (monthlyLeftoverWithoutTutoring < 1000) {
+            message = "😬 You can survive but with a very basic lifestyle. No luxuries or Queensland trips.";
+            bgColor = 'bg-orange-500/30';
+            borderColor = 'border-orange-500';
+            textColor = 'text-orange-300';
+        } else {
+            message = `🙂 You're managing okay with $${Math.round(monthlyLeftoverWithoutTutoring)}/month, but lifestyle is still quite limited.`;
+            bgColor = 'bg-blue-500/30';
+            borderColor = 'border-blue-500';
+            textColor = 'text-blue-300';
+        }
+    }
+
+    // Add property context
+    if (propertyCost === 0) {
+        message += " (Renting gives you more cash but no asset building.)";
+    } else if (propertyCost < 300000) {
+        message += " (Cheap property = more cash but poor quality/location.)";
+    } else {
+        message += " (Decent property but less available cash.)";
     }
 
     statusElement.className = `${bgColor} rounded-lg p-4 mb-4 border-2 ${borderColor}`;
