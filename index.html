@@ -35,101 +35,33 @@
         .section-fade { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
         .section-fade.visible { opacity: 1; transform: translateY(0); }
 
-        /* Guided Tour Styles */
-        .tour-guide {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 1000;
-            transition: all 0.3s ease;
+        /* Slider Styles */
+        .slider {
+            -webkit-appearance: none;
+            background: linear-gradient(to right, #EF4444 0%, #F59E0B 50%, #10B981 100%);
         }
-
-        .tour-start-btn {
-            background: linear-gradient(45deg, #8B5CF6, #06B6D4);
-            color: white;
-            border: none;
-            padding: 16px 24px;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 3px solid #6B46C1;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
-            animation: pulse-glow 2s infinite;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
-
-        @keyframes pulse-glow {
-            0%, 100% { transform: scale(1); box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4); }
-            50% { transform: scale(1.05); box-shadow: 0 12px 35px rgba(139, 92, 246, 0.6); }
-        }
-
-        .tour-controls {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            background: rgba(17, 24, 39, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 25px;
-            padding: 16px 24px;
-            display: none;
-            align-items: center;
-            gap: 16px;
-            border: 2px solid rgba(139, 92, 246, 0.3);
-        }
-
-        .tour-controls.active {
-            display: flex;
-        }
-
-        .tour-progress {
-            color: #8B5CF6;
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .tour-btn {
-            background: linear-gradient(45deg, #8B5CF6, #06B6D4);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: bold;
+        .slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 3px solid #6B46C1;
             cursor: pointer;
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
 
-        .tour-btn:hover {
-            transform: scale(1.05);
-        }
 
-        .tour-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .section-highlight {
-            position: relative;
-        }
-
-        .section-highlight::before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
-            background: linear-gradient(45deg, #8B5CF6, #06B6D4);
-            border-radius: 20px;
-            opacity: 0.1;
-            animation: highlight-pulse 2s infinite;
-            pointer-events: none;
-        }
-
-        @keyframes highlight-pulse {
-            0%, 100% { opacity: 0.1; transform: scale(1); }
-            50% { opacity: 0.2; transform: scale(1.02); }
-        }
     </style>
 </head>
 <body class="bg-dark-bg text-white font-inter text-xl leading-relaxed">
@@ -145,11 +77,11 @@
             <a href="#hero" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
                 ✨ The Dream
             </a>
+            <a href="#problem" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
+                🚧 What's In Our Way?
+            </a>
             <a href="#paul-message" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
                 💝 Paul's Message
-            </a>
-            <a href="#problem" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
-                � The Problem
             </a>
             <a href="#solution" class="block py-3 px-4 rounded-lg hover:bg-purple-primary/20 transition-colors nav-link">
                 🎯 Smart Solution
@@ -175,47 +107,226 @@
         <section id="hero" class="min-h-screen gradient-bg flex items-center justify-center relative overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-r from-purple-primary/20 to-cyan-bright/20 animate-pulse"></div>
             <div class="container mx-auto px-6 text-center relative z-10">
-                <div class="mb-8">
-                    <div class="text-6xl mb-4">✨</div>
-                    <h1 class="text-6xl md:text-8xl font-bold mb-8 bg-gradient-to-r from-purple-neon to-cyan-bright bg-clip-text text-transparent">
-                        Imagine Your Perfect Life
+                <div class="mb-12">
+                    <h1 class="text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-purple-neon to-cyan-bright bg-clip-text text-transparent leading-tight">
+                        No Financial Limits.<br/>
+                        Just Pure Freedom.
                     </h1>
-                </div>
-                <p class="text-2xl md:text-3xl mb-12 text-gray-300 max-w-4xl mx-auto">
-                    What if money was never a worry again? What if luxury, travel, and family time were just... normal?
-                </p>
-
-                <div class="grid md:grid-cols-3 gap-8 mb-12 max-w-6xl mx-auto">
-                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 neon-glow">
-                        <div class="text-4xl mb-4">🏖️</div>
-                        <h3 class="text-2xl font-bold text-cyan-bright mb-2">Monthly Queensland Trips</h3>
-                        <p class="text-lg text-gray-300">12 round-trip flights per year. Visit whenever you want.</p>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 neon-glow">
-                        <div class="text-4xl mb-4">🛍️</div>
-                        <h3 class="text-2xl font-bold text-green-success mb-2">Shopping Without Limits</h3>
-                        <p class="text-lg text-gray-300">$30,000 annual shopping budget. Buy what you love.</p>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-6 neon-glow">
-                        <div class="text-4xl mb-4">🏨</div>
-                        <h3 class="text-2xl font-bold text-orange-warning mb-2">Luxury Family Holidays</h3>
-                        <p class="text-lg text-gray-300">Master bedrooms for everyone. No more cramped rentals.</p>
-                    </div>
+                    <p class="text-xl md:text-2xl mb-8 text-gray-300 max-w-4xl mx-auto font-medium">
+                        Separate vacations with both parents • Family trips to America • Guilt-free shopping • Comfortable homes for Mahnaz & Iraj • Trust fund for everyone
+                    </p>
                 </div>
 
-                <div class="bg-gradient-to-r from-green-success/20 to-cyan-bright/20 rounded-2xl p-8 max-w-3xl mx-auto mb-12">
-                    <p class="text-3xl font-bold text-white mb-4">This isn't just a dream...</p>
-                    <p class="text-5xl font-black text-green-success mb-4">It's completely achievable</p>
-                    <p class="text-xl text-gray-300">We have a once-in-a-lifetime opportunity to make this our reality</p>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 max-w-7xl mx-auto">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 neon-glow">
+                        <div class="text-3xl mb-3">✈️</div>
+                        <h3 class="text-xl font-bold text-cyan-bright mb-2">Unlimited Queensland Trips</h3>
+                        <p class="text-sm text-gray-300">Visit family whenever you want. Multiple trips per year, no budget stress.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 neon-glow">
+                        <div class="text-3xl mb-3">🌍</div>
+                        <h3 class="text-xl font-bold text-green-success mb-2">Family Adventures</h3>
+                        <p class="text-sm text-gray-300">America trips, Europe tours. Take the whole family anywhere.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 neon-glow">
+                        <div class="text-3xl mb-3">🛍️</div>
+                        <h3 class="text-xl font-bold text-purple-neon mb-2">Guilt-Free Shopping</h3>
+                        <p class="text-sm text-gray-300">Buy what makes you happy. No more checking bank balances.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 neon-glow">
+                        <div class="text-3xl mb-3">🏠</div>
+                        <h3 class="text-xl font-bold text-orange-warning mb-2">Beautiful Homes</h3>
+                        <p class="text-sm text-gray-300">Comfortable apartments for Mahnaz & Iraj. Grammy well cared for.</p>
+                    </div>
                 </div>
 
-                <div class="mt-16">
-                    <a href="#paul-message" class="inline-block bg-green-success hover:bg-green-600 px-8 py-4 rounded-full text-xl font-semibold transition-all transform hover:scale-105 text-gray-900">
-                        Show Me How
+                <div class="grid md:grid-cols-3 gap-6 mb-12 max-w-6xl mx-auto">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 neon-glow">
+                        <div class="text-3xl mb-3">🎄</div>
+                        <h3 class="text-xl font-bold text-red-400 mb-2">Luxury Christmas Holidays</h3>
+                        <p class="text-sm text-gray-300">Premium rentals. Master bedrooms for everyone. No compromises.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 neon-glow">
+                        <div class="text-3xl mb-3">🍽️</div>
+                        <h3 class="text-xl font-bold text-yellow-400 mb-2">Regular Family Dinners</h3>
+                        <p class="text-sm text-gray-300">Take each other out more often. Celebrate life together.</p>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 neon-glow">
+                        <div class="text-3xl mb-3">💰</div>
+                        <h3 class="text-xl font-bold text-green-400 mb-2">Family Trust Fund</h3>
+                        <p class="text-sm text-gray-300">Monthly transfers to everyone. Financial freedom for all.</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-r from-green-success/30 to-cyan-bright/30 rounded-xl p-8 max-w-4xl mx-auto mb-12 border border-green-success/20">
+                    <div class="text-center">
+                        <p class="text-2xl font-bold text-white mb-3">This isn't just a dream.</p>
+                        <p class="text-4xl font-black text-green-success mb-2">We have the exact plan to make it happen.</p>
+                        <p class="text-2xl font-bold text-cyan-bright mb-4">And we don't have to wait!</p>
+                        <p class="text-lg text-gray-200 mb-6">One strategic move unlocks $167k+ extra per year • <strong class="text-yellow-400">Starting in the next 12 months</strong></p>
+                        <div class="flex items-center justify-center gap-4 text-sm text-gray-300">
+                            <span class="flex items-center gap-1">
+                                <div class="w-2 h-2 bg-green-success rounded-full"></div>
+                                No debt stress
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <div class="w-2 h-2 bg-cyan-bright rounded-full"></div>
+                                Everyone benefits
+                            </span>
+                            <span class="flex items-center gap-1">
+                                <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                Within 12 months
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12">
+                    <a href="#paul-message" class="inline-flex items-center gap-2 bg-green-success hover:bg-green-600 px-6 py-3 rounded-lg text-lg font-semibold transition-all duration-200 text-gray-900 shadow-lg hover:shadow-xl">
+                        <span>See The Plan</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
                     </a>
                 </div>
             </div>
 
+        </section>
+
+        <!-- What's Standing In Our Way Section -->
+        <section id="problem" class="min-h-screen bg-gradient-to-br from-orange-warning/20 to-red-500/20 py-20">
+            <div class="container mx-auto px-6">
+                <div class="section-fade text-center">
+                    <h2 class="text-5xl font-bold mb-16 text-orange-warning">🚧 What's Standing In Our Way?</h2>
+
+                    <div class="max-w-4xl mx-auto">
+                        <div class="bg-gray-900/80 rounded-2xl p-12 mb-12">
+                            <div class="text-8xl mb-8">🏦</div>
+                            <h3 class="text-4xl font-bold text-white mb-8">We're Giving Too Much Money to Banks</h3>
+
+                            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                                <div class="text-center">
+                                    <p class="text-6xl font-black text-red-500 mb-4">$2,830,320</p>
+                                    <p class="text-xl text-gray-300">Total we'll pay banks over time</p>
+                                    <p class="text-lg text-red-400">Money that could buy more properties instead</p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-6xl font-black text-orange-warning mb-4">$144,000</p>
+                                    <p class="text-xl text-gray-300">Every single year to banks</p>
+                                    <p class="text-lg text-orange-warning">That's $12,000 every month!</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-red-500/20 rounded-lg p-6">
+                                <p class="text-2xl font-bold text-red-400 mb-4">Think about it this way:</p>
+                                <p class="text-xl text-gray-300">
+                                    It's like giving $170,000 every year to someone you really despise.
+                                    That money could be buying us luxury holidays, shopping, and building wealth for Lucas instead.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Additional Threats -->
+                        <div class="grid md:grid-cols-2 gap-8 mb-12">
+                            <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500/30">
+                                <div class="text-5xl mb-4">📉</div>
+                                <h4 class="text-2xl font-bold text-red-400 mb-4">Mahnaz's Financial Reality Calculator</h4>
+
+                                <!-- Interactive Slider -->
+                                <div class="bg-gray-800/50 rounded-lg p-6 mb-6">
+                                    <h5 class="text-xl font-bold text-cyan-bright mb-4">🏠 Apartment Cost Slider</h5>
+                                    <div class="mb-4">
+                                        <label class="block text-lg text-gray-300 mb-2">How much will Mahnaz spend on an apartment?</label>
+                                        <input type="range" id="apartmentSlider" min="100000" max="700000" step="100000" value="400000"
+                                               class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                                        <div class="flex justify-between text-sm text-gray-400 mt-2">
+                                            <span>$100k</span>
+                                            <span>$200k</span>
+                                            <span>$300k</span>
+                                            <span>$400k</span>
+                                            <span>$500k</span>
+                                            <span>$600k</span>
+                                            <span>$700k</span>
+                                        </div>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-2xl font-bold text-orange-warning">Apartment Cost: <span id="apartmentCost">$400,000</span></p>
+                                    </div>
+                                </div>
+
+                                <!-- Dynamic Financial Breakdown -->
+                                <div class="space-y-3 text-lg text-gray-300 mb-4">
+                                    <p><strong class="text-cyan-bright">$800k from house sale</strong> → <strong class="text-orange-warning" id="apartmentCostText">$400k for apartment</strong></p>
+                                    <p><strong class="text-red-400" id="leftoverText">$400k left</strong> + <strong class="text-red-400">$200k super</strong> = <strong id="totalText">$600k total</strong></p>
+                                    <p><strong class="text-orange-warning" id="yearlyText">$600k ÷ 20 years = $30k/year</strong> = <strong class="text-red-400" id="monthlyText">$2,500/month</strong></p>
+                                </div>
+
+                                <div class="bg-red-600/30 rounded-lg p-4 mb-4">
+                                    <h5 class="text-xl font-bold text-red-300 mb-3">Monthly budget breakdown:</h5>
+                                    <div class="grid md:grid-cols-2 gap-3 text-sm text-gray-300">
+                                        <div>• Groceries: $400/month</div>
+                                        <div>• Council rates: $200/month</div>
+                                        <div>• Utilities: $150/month</div>
+                                        <div>• Body corporate: $300/month</div>
+                                        <div>• Insurance: $100/month</div>
+                                        <div>• Phone/internet: $80/month</div>
+                                        <div>• Medical: $200/month</div>
+                                        <div>• Car costs: $300/month</div>
+                                    </div>
+                                    <p class="text-red-400 font-bold mt-3">= $1,730/month in basics = <strong id="leftoverMonthly">$770/month left</strong></p>
+                                </div>
+
+                                <!-- Dynamic Status Message -->
+                                <div id="financialStatus" class="bg-orange-500/30 rounded-lg p-4 mb-4 border-2 border-orange-500">
+                                    <p class="text-xl font-bold text-orange-300">You can afford some basics, but no luxuries or emergencies.</p>
+                                </div>
+
+                                <p class="text-red-400 font-bold">The cheaper the apartment, the more dependent on family support!</p>
+                            </div>
+
+                            <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500/30">
+                                <div class="text-5xl mb-4">🤖</div>
+                                <h4 class="text-2xl font-bold text-red-400 mb-4">Iraj's Income Threat</h4>
+                                <div class="space-y-3 text-lg text-gray-300">
+                                    <p><strong class="text-cyan-bright">AI tutoring</strong> is already here</p>
+                                    <p><strong class="text-orange-warning">ChatGPT, Khan Academy AI</strong> replacing human tutors</p>
+                                    <p><strong class="text-red-400">Timeline:</strong> 2-3 years max before major impact</p>
+                                    <p class="text-red-400 font-bold">Tutoring income will disappear!</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- The Compounding Crisis -->
+                        <div class="bg-gradient-to-r from-red-500/30 to-orange-500/30 rounded-2xl p-8 mb-12 border-2 border-red-500">
+                            <h4 class="text-3xl font-bold text-red-400 mb-6 text-center">⚠️ The Perfect Storm</h4>
+                            <div class="grid md:grid-cols-3 gap-6 text-center">
+                                <div>
+                                    <p class="text-2xl font-bold text-red-400 mb-2">Paul's Job at Risk</p>
+                                    <p class="text-lg text-gray-300">AI replacing high-paying tech roles</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-red-400 mb-2">Iraj's Income Gone</p>
+                                    <p class="text-lg text-gray-300">AI tutoring takes over</p>
+                                </div>
+                                <div>
+                                    <p class="text-2xl font-bold text-red-400 mb-2">Mahnaz's Money Gone</p>
+                                    <p class="text-lg text-gray-300">$500k apartment + living costs = family burden</p>
+                                </div>
+                            </div>
+                            <p class="text-2xl font-bold text-center text-red-400 mt-6">
+                                Flying solo = Financial disaster for everyone
+                            </p>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-gray-800 to-gray-700 rounded-2xl p-8">
+                            <h4 class="text-3xl font-bold text-white mb-6">But here's the good news...</h4>
+                            <p class="text-2xl text-cyan-bright font-semibold">
+                                This problem has a simple, elegant solution that protects everyone from ALL these threats.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Paul's Message Section -->
@@ -489,96 +600,7 @@
 
 
 
-        <!-- The Simple Problem Section -->
-        <section id="problem" class="min-h-screen bg-gradient-to-br from-orange-warning/20 to-red-500/20 py-20">
-            <div class="container mx-auto px-6">
-                <div class="section-fade text-center">
-                    <h2 class="text-5xl font-bold mb-16 text-orange-warning">💡 There's Just One Simple Problem</h2>
 
-                    <div class="max-w-4xl mx-auto">
-                        <div class="bg-gray-900/80 rounded-2xl p-12 mb-12">
-                            <div class="text-8xl mb-8">🏦</div>
-                            <h3 class="text-4xl font-bold text-white mb-8">We're Giving Too Much Money to Banks</h3>
-
-                            <div class="grid md:grid-cols-2 gap-8 mb-8">
-                                <div class="text-center">
-                                    <p class="text-6xl font-black text-red-500 mb-4">$2,830,320</p>
-                                    <p class="text-xl text-gray-300">Total we'll pay banks over time</p>
-                                    <p class="text-lg text-red-400">Money that could buy more properties instead</p>
-                                </div>
-                                <div class="text-center">
-                                    <p class="text-6xl font-black text-orange-warning mb-4">$144,000</p>
-                                    <p class="text-xl text-gray-300">Every single year to banks</p>
-                                    <p class="text-lg text-orange-warning">That's $12,000 every month!</p>
-                                </div>
-                            </div>
-
-                            <div class="bg-red-500/20 rounded-lg p-6">
-                                <p class="text-2xl font-bold text-red-400 mb-4">Think about it this way:</p>
-                                <p class="text-xl text-gray-300">
-                                    It's like giving $170,000 every year to someone you really despise.
-                                    That money could be buying us luxury holidays, shopping, and building wealth for Lucas instead.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Additional Threats -->
-                        <div class="grid md:grid-cols-2 gap-8 mb-12">
-                            <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500/30">
-                                <div class="text-5xl mb-4">📉</div>
-                                <h4 class="text-2xl font-bold text-red-400 mb-4">Mahnaz's Super Crisis</h4>
-                                <div class="space-y-3 text-lg text-gray-300">
-                                    <p><strong class="text-red-400">$200k super</strong> needs to last 20 years</p>
-                                    <p><strong class="text-orange-warning">Inflation</strong> will cut purchasing power in half</p>
-                                    <p><strong class="text-red-400">Reality:</strong> Only $10k/year → $5k/year buying power</p>
-                                    <p class="text-red-400 font-bold">Super will run out in 10-12 years, not 20!</p>
-                                </div>
-                            </div>
-
-                            <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500/30">
-                                <div class="text-5xl mb-4">🤖</div>
-                                <h4 class="text-2xl font-bold text-red-400 mb-4">Iraj's Income Threat</h4>
-                                <div class="space-y-3 text-lg text-gray-300">
-                                    <p><strong class="text-cyan-bright">AI tutoring</strong> is already here</p>
-                                    <p><strong class="text-orange-warning">ChatGPT, Khan Academy AI</strong> replacing human tutors</p>
-                                    <p><strong class="text-red-400">Timeline:</strong> 2-3 years max before major impact</p>
-                                    <p class="text-red-400 font-bold">Tutoring income will disappear!</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- The Compounding Crisis -->
-                        <div class="bg-gradient-to-r from-red-500/30 to-orange-500/30 rounded-2xl p-8 mb-12 border-2 border-red-500">
-                            <h4 class="text-3xl font-bold text-red-400 mb-6 text-center">⚠️ The Perfect Storm</h4>
-                            <div class="grid md:grid-cols-3 gap-6 text-center">
-                                <div>
-                                    <p class="text-2xl font-bold text-red-400 mb-2">Paul's Job at Risk</p>
-                                    <p class="text-lg text-gray-300">AI replacing high-paying tech roles</p>
-                                </div>
-                                <div>
-                                    <p class="text-2xl font-bold text-red-400 mb-2">Iraj's Income Gone</p>
-                                    <p class="text-lg text-gray-300">AI tutoring takes over</p>
-                                </div>
-                                <div>
-                                    <p class="text-2xl font-bold text-red-400 mb-2">Mahnaz's Super Depleted</p>
-                                    <p class="text-lg text-gray-300">Inflation destroys buying power</p>
-                                </div>
-                            </div>
-                            <p class="text-2xl font-bold text-center text-red-400 mt-6">
-                                Flying solo = Financial disaster for everyone
-                            </p>
-                        </div>
-
-                        <div class="bg-gradient-to-r from-gray-800 to-gray-700 rounded-2xl p-8">
-                            <h4 class="text-3xl font-bold text-white mb-6">But here's the good news...</h4>
-                            <p class="text-2xl text-cyan-bright font-semibold">
-                                This problem has a simple, elegant solution that protects everyone from ALL these threats.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <!-- The Smart Solution Section -->
         <section id="solution" class="min-h-screen bg-gradient-to-br from-green-success/20 to-cyan-bright/20 py-20">
@@ -1302,19 +1324,7 @@
         </section>
     </main>
 
-    <!-- Guided Tour Elements -->
-    <div id="tour-guide" class="tour-guide">
-        <button id="tour-start-btn" class="tour-start-btn">
-            🎯 Start Guided Tour
-        </button>
-    </div>
 
-    <div id="tour-controls" class="tour-controls">
-        <button id="tour-prev" class="tour-btn">← Previous</button>
-        <div id="tour-progress" class="tour-progress">Step 1 of 7</div>
-        <button id="tour-next" class="tour-btn">Next →</button>
-        <button id="tour-skip" class="tour-btn" style="background: #6B7280; margin-left: 16px;">Skip Tour</button>
-    </div>
 
     <script src="script.js"></script>
 </body>

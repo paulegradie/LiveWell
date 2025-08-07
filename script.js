@@ -9,9 +9,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeMermaidDiagram();
     initializeCounters();
     initializeWealthChart();
-    initializeGuidedTour();
+
     initializeTableHoverEffects();
     initializeVisualEffects();
+    initializeApartmentCalculator();
 });
 
 // Navigation functionality
@@ -824,136 +825,4 @@ function generateTogetherData() {
     return data;
 }
 
-// Guided Tour System
-let tourState = {
-    active: false,
-    currentStep: 0,
-    steps: [
-        { id: 'hero', name: 'The Dream', description: 'Imagine your perfect life' },
-        { id: 'paul-message', name: "Paul's Message", description: 'Why this matters to our family' },
-        { id: 'problem', name: 'The Problem', description: 'Our current financial situation' },
-        { id: 'solution', name: 'Smart Solution', description: 'The debt elimination strategy' },
-        { id: 'lifestyle', name: 'Your New Life', description: 'What everyone gets' },
-        { id: 'how', name: 'The Numbers', description: 'Exact financial calculations' },
-        { id: 'choice', name: 'Your Choice', description: 'Compare the two paths' }
-    ]
-};
 
-function initializeGuidedTour() {
-    const tourGuide = document.getElementById('tour-guide');
-    const tourStartBtn = document.getElementById('tour-start-btn');
-    const tourPrev = document.getElementById('tour-prev');
-    const tourNext = document.getElementById('tour-next');
-    const tourSkip = document.getElementById('tour-skip');
-
-    // Show tour guide button immediately (it's already styled to be visible)
-    if (tourGuide) {
-        tourGuide.style.display = 'block';
-        tourGuide.style.opacity = '1';
-    }
-
-    // Start tour
-    if (tourStartBtn) {
-        tourStartBtn.addEventListener('click', startTour);
-    }
-
-    // Tour navigation
-    if (tourPrev) {
-        tourPrev.addEventListener('click', () => navigateTour(-1));
-    }
-    if (tourNext) {
-        tourNext.addEventListener('click', () => navigateTour(1));
-    }
-    if (tourSkip) {
-        tourSkip.addEventListener('click', endTour);
-    }
-}
-
-function startTour() {
-    tourState.active = true;
-    tourState.currentStep = 0;
-
-    // Hide tour guide button, show controls
-    const tourGuide = document.getElementById('tour-guide');
-    const tourControls = document.getElementById('tour-controls');
-
-    if (tourGuide) tourGuide.style.display = 'none';
-    if (tourControls) tourControls.classList.add('active');
-
-    // Navigate to first step
-    updateTourStep();
-}
-
-function navigateTour(direction) {
-    const newStep = tourState.currentStep + direction;
-
-    if (newStep >= 0 && newStep < tourState.steps.length) {
-        tourState.currentStep = newStep;
-        updateTourStep();
-    } else if (newStep >= tourState.steps.length) {
-        // Tour completed
-        endTour();
-    }
-}
-
-function updateTourStep() {
-    const currentStepData = tourState.steps[tourState.currentStep];
-    const targetElement = document.getElementById(currentStepData.id);
-    const tourProgress = document.getElementById('tour-progress');
-    const tourPrev = document.getElementById('tour-prev');
-    const tourNext = document.getElementById('tour-next');
-
-    // Update progress
-    if (tourProgress) {
-        tourProgress.textContent = `Step ${tourState.currentStep + 1} of ${tourState.steps.length}`;
-    }
-
-    // Update button states
-    if (tourPrev) {
-        tourPrev.disabled = tourState.currentStep === 0;
-    }
-    if (tourNext) {
-        tourNext.textContent = tourState.currentStep === tourState.steps.length - 1 ? 'Finish' : 'Next →';
-    }
-
-    // Remove previous highlights
-    document.querySelectorAll('.section-highlight').forEach(el => {
-        el.classList.remove('section-highlight');
-    });
-
-    // Highlight current section
-    if (targetElement) {
-        targetElement.classList.add('section-highlight');
-
-        // Smooth scroll to section
-        targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-        });
-    }
-}
-
-function endTour() {
-    tourState.active = false;
-
-    // Hide controls, show guide button
-    const tourGuide = document.getElementById('tour-guide');
-    const tourControls = document.getElementById('tour-controls');
-
-    if (tourControls) tourControls.classList.remove('active');
-    if (tourGuide) {
-        tourGuide.style.display = 'block';
-        // Change button text to "Restart Tour"
-        const tourStartBtn = document.getElementById('tour-start-btn');
-        if (tourStartBtn) {
-            tourStartBtn.textContent = '🔄 Restart Tour';
-        }
-    }
-
-    // Remove all highlights
-    document.querySelectorAll('.section-highlight').forEach(el => {
-        el.classList.remove('section-highlight');
-    });
-}
-
-// Additional navigation setup (already handled in initializeNavigation)
