@@ -34,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAnimations();
     initializeComparison();
     initializeMermaidDiagram();
+    initializeFamilyTrustDiagram();
     initializeCounters();
     initializeWealthChart();
 
@@ -228,7 +229,8 @@ function initializeCounters() {
     });
 }
 
-// Mermaid diagram initialization
+// Mermaid diagram initialization - COMMENTED OUT FOR TESTING
+/*
 function initializeMermaidDiagram() {
     // Initialize Mermaid
     mermaid.initialize({ 
@@ -290,6 +292,75 @@ function initializeMermaidDiagram() {
         });
     }
 }
+*/
+
+// Family Trust Flow Diagram initialization - COMMENTED OUT FOR TESTING
+/*
+function initializeFamilyTrustDiagram() {
+    // Family trust flow diagram definition
+    const familyTrustDiagram = `
+        flowchart TD
+            %% Income Sources
+            PaulIncome["👨‍💼 Paul<br/>$265k Income"]
+            AnaIncome["👩‍💼 Ana<br/>Support & Management"]
+            MahnazSuper["👩‍🦳 Mahnaz<br/>Superannuation"]
+            IrajTutoring["👨‍🦳 Iraj<br/>Tutoring Income"]
+
+            %% Property Income Sources
+            House1["🏠 Property 1<br/>$30k/year"]
+            House2["🏠 Property 2<br/>$30k/year"]
+            House3["🏠 Property 3<br/>$30k/year"]
+            House4["🏠 Property 4<br/>$30k/year"]
+            GrannyFlat["🏡 Granny Flat<br/>$15k/year"]
+
+            %% Central Trust
+            Trust["🏛️ FAMILY TRUST<br/>💰 $264k Total<br/>Annual Income"]
+
+            %% Distribution to Family Members
+            PaulShare["👨‍💼 Paul<br/>$66k Share"]
+            AnaShare["👩‍💼 Ana<br/>$66k Share"]
+            MahnazShare["👩‍🦳 Mahnaz<br/>$66k Share"]
+            IrajShare["👨‍🦳 Iraj<br/>$66k Share"]
+
+            %% Flow from income sources to trust
+            PaulIncome --> Trust
+            AnaIncome --> Trust
+            MahnazSuper --> Trust
+            IrajTutoring --> Trust
+            House1 --> Trust
+            House2 --> Trust
+            House3 --> Trust
+            House4 --> Trust
+            GrannyFlat --> Trust
+
+            %% Flow from trust to family members
+            Trust --> PaulShare
+            Trust --> AnaShare
+            Trust --> MahnazShare
+            Trust --> IrajShare
+
+            %% Styling
+            classDef incomeSource fill:#4ade80,stroke:#16a34a,stroke-width:2px,color:#000
+            classDef trust fill:#fbbf24,stroke:#f59e0b,stroke-width:4px,color:#000
+            classDef distribution fill:#60a5fa,stroke:#3b82f6,stroke-width:2px,color:#000
+
+            class PaulIncome,AnaIncome,MahnazSuper,IrajTutoring,House1,House2,House3,House4,GrannyFlat incomeSource
+            class Trust trust
+            class PaulShare,AnaShare,MahnazShare,IrajShare distribution
+    `;
+
+    // Render the family trust diagram
+    const familyTrustContainer = document.getElementById('family-trust-diagram');
+    if (familyTrustContainer) {
+        mermaid.render('family-trust-flow-diagram', familyTrustDiagram).then(result => {
+            familyTrustContainer.innerHTML = result.svg;
+        }).catch(error => {
+            console.error('Error rendering Family Trust diagram:', error);
+            familyTrustContainer.innerHTML = '<p class="text-center text-gray-500">Family Trust diagram could not be loaded</p>';
+        });
+    }
+}
+*/
 
 // Add hover effects for tables (moved to main initialization)
 function initializeTableHoverEffects() {

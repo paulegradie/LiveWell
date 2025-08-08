@@ -1,0 +1,241 @@
+<!-- What's Standing In Our Way Section -->
+<section id="problem" class="min-h-screen bg-gradient-to-br from-orange-warning/20 to-red-500/20 py-20">
+    <div class="container mx-auto px-6">
+        <div class="section-fade text-center">
+            <h2 class="text-5xl font-bold mb-16 text-orange-warning">🚧 What's Standing In Our Way?</h2>
+            <p>In this section, I want to make it clear how bleak our futures will be if we don't take action.</p>
+            <div class="w-full max-w-7xl mx-auto">
+
+                <div class="bg-gray-900/80 rounded-2xl p-6 sm:p-8 md:p-12 mb-12">
+                    <div class="text-6xl sm:text-7xl md:text-8xl mb-6 sm:mb-8">🏦</div>
+                    <h3 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6 sm:mb-8">We're Giving Too Much Money to Banks</h3>
+
+                    <div class="grid md:grid-cols-2 gap-8 mb-8">
+                        <div class="text-center">
+                            <p class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-red-500 mb-4">$2,830,320</p>
+                            <p class="text-lg sm:text-xl text-gray-300">Total we'll pay banks over time</p>
+                            <p class="text-sm sm:text-lg text-red-400">Money that could buy more properties instead</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-orange-warning mb-4">$168,000</p>
+                            <p class="text-lg sm:text-xl text-gray-300">Every single year to banks</p>
+                            <p class="text-sm sm:text-lg text-orange-warning">That's $14,000 every month!</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-red-500/20 rounded-lg p-4 sm:p-6">
+                        <p class="text-xl sm:text-2xl font-bold text-red-400 mb-4">Think about it this way:</p>
+                        <p class="text-lg sm:text-xl text-gray-300">
+                            It's like giving $170,000 every year to someone you really despise.
+                            That money could be buying us luxury holidays, shopping, and building wealth for Lucas instead.
+                        </p>
+                        <br />
+                        <p>
+                            <b class="animated-highlight">
+                                If Paul and Ana are going to be giving $120,000 to the bank each year anyways - we'd rather split it and spend it on a much better
+                                lifestyle!
+                            </b>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Financial Reality Check -->
+                <div class="text-center mb-8">
+                    <h3 class="text-3xl font-bold text-orange-warning mb-4">Let's have a look at your financial positions...</h3>
+                    <p class="text-xl text-gray-300 max-w-4xl mx-auto">
+                        Use these interactive calculators to see exactly how much money you'll have each month in retirement.
+                        Adjust the sliders to explore different scenarios and see the real impact on your lifestyle.
+                    </p>
+                </div>
+
+                <!-- Financial Reality Calculators -->
+                <div class="space-y-8 mb-12">
+                    <div class="bg-red-500/20 rounded-2xl p-8 border-2 border-red-500/30">
+                        <div class="text-5xl mb-4">📉</div>
+                        <h4 class="text-2xl font-bold text-red-400 mb-4">Mahnaz's Financial Reality Calculator</h4>
+
+                        <!-- Interactive Slider -->
+                        <div class="bg-gray-800/50 rounded-lg p-6 mb-6">
+                            <h5 class="text-xl font-bold text-cyan-bright mb-4">Apartment Cost Slider</h5>
+                            <div class="mb-4">
+                                <label class="block text-lg text-gray-300 mb-2">How much will Mahnaz spend on an apartment?</label>
+                                <div class="text-center mb-3">
+                                    <p class="text-2xl font-bold text-orange-warning">Apartment Cost: <span id="apartmentCost">$400,000</span></p>
+                                </div>
+                                <input type="range" id="apartmentSlider" min="0" max="700000" step="100000" value="400000"
+                                    class="w-full h-3 bg-gray-700 rounded-lg appearance-none cursor-pointer slider">
+                                <div class="flex justify-between text-sm text-gray-400 mt-2">
+                                    <span>Rent ($0)</span>
+                                    <span>$100k</span>
+                                    <span>$200k</span>
+                                    <span>$300k</span>
+                                    <span>$400k</span>
+                                    <span>$500k</span>
+                                    <span>$600k</span>
+                                    <span>$700k</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Super Amount Slider -->
+                        <div class="bg-gray-800/50 rounded-lg p-4 mb-4">
+                            <h5 class="text-lg font-bold text-purple-400 mb-3">Super Amount</h5>
+                            <p class="text-center text-lg font-semibold text-purple-300 mb-2">Super: <span id="superAmount">$200,000</span></p>
+                            <input type="range" id="superSlider" min="200000" max="250000" step="10000" value="200000"
+                                class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer slider-small">
+                            <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                <span>$200k</span>
+                                <span>$225k</span>
+                                <span>$250k</span>
+                            </div>
+                        </div>
+
+                        <!-- Available Funds Summary -->
+                        <div class="space-y-3 mb-4">
+                            <!-- House Sale Funds -->
+                            <div class="bg-cyan-500/10 rounded-lg p-3 border border-cyan-500/20">
+                                <div class="text-center">
+                                    <div class="text-lg font-semibold text-cyan-bright">House Sale Proceeds</div>
+                                    <div class="text-sm text-gray-300 mb-1">
+                                        $800k → <span class="text-orange-warning" id="apartmentCostText">$400k for apartment</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total Available Funds -->
+                            <div class="bg-purple-500/10 rounded-lg p-3 border border-purple-500/20">
+                                <div class="text-center">
+                                    <div class="text-lg font-semibold text-purple-300">Total Available Funds</div>
+                                    <div class="text-sm text-gray-300 mb-1">
+                                        <span class="text-red-400" id="leftoverText">$400k left</span> +
+                                        <span class="text-red-400" id="superText">$200k super</span>
+                                    </div>
+                                    <div class="text-lg font-bold" id="totalText">$600k total</div>
+                                </div>
+                            </div>
+
+                            <!-- Monthly Income -->
+                            <div class="bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-lg p-4 border-2 border-orange-500/30">
+                                <div class="text-center">
+                                    <div class="text-sm text-gray-300 mb-1">
+                                        <span class="text-orange-warning" id="yearlyText">$600k ÷ 20 years = $30k/year</span>
+                                    </div>
+                                    <div class="text-xl font-bold text-red-400" id="monthlyText">$2,500/month</div>
+                                    <div class="text-xs text-gray-400">available for living expenses</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-red-600/30 rounded-lg p-4 mb-4">
+                            <h5 class="text-xl font-bold text-red-300 mb-3">Adjust Monthly Expenses:</h5>
+
+                            <!-- Expense Sliders Grid -->
+                            <div class="grid md:grid-cols-2 gap-4 mb-4">
+                                <!-- Food -->
+                                <div class="bg-gray-800/50 rounded p-3">
+                                    <label class="text-sm font-semibold text-gray-300">Food</label>
+                                    <div class="text-center text-lg font-bold text-white mb-2" id="groceriesValue">$400</div>
+                                    <input type="range" id="groceriesSlider" min="200" max="600" step="50" value="400"
+                                        class="w-full h-2 bg-gray-700 rounded cursor-pointer slider-small">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                        <span>$200</span>
+                                        <span>$600</span>
+                                    </div>
+                                </div>
+
+                                <!-- Council Rates -->
+                                <div class="bg-gray-800/50 rounded p-3">
+                                    <label class="text-sm font-semibold text-gray-300">Council Rates</label>
+                                    <div class="text-center text-lg font-bold text-white mb-2" id="councilValue">$200</div>
+                                    <input type="range" id="councilSlider" min="50" max="250" step="25" value="200"
+                                        class="w-full h-2 bg-gray-700 rounded cursor-pointer slider-small">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                        <span>$50</span>
+                                        <span>$250</span>
+                                    </div>
+                                </div>
+
+                                <!-- Heat & Electricity -->
+                                <div class="bg-gray-800/50 rounded p-3">
+                                    <label class="text-sm font-semibold text-gray-300">Heat & Electricity</label>
+                                    <div class="text-center text-lg font-bold text-white mb-2" id="utilitiesValue">$150</div>
+                                    <input type="range" id="utilitiesSlider" min="100" max="200" step="25" value="150"
+                                        class="w-full h-2 bg-gray-700 rounded cursor-pointer slider-small">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                        <span>$100</span>
+                                        <span>$200</span>
+                                    </div>
+                                </div>
+
+                                <!-- Body Corporate -->
+                                <div class="bg-gray-800/50 rounded p-3">
+                                    <label class="text-sm font-semibold text-gray-300">Body Corporate</label>
+                                    <div class="text-center text-lg font-bold text-white mb-2" id="bodycorpValue">$300</div>
+                                    <input type="range" id="bodycorpSlider" min="100" max="500" step="50" value="300"
+                                        class="w-full h-2 bg-gray-700 rounded cursor-pointer slider-small">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                        <span>$100</span>
+                                        <span>$500</span>
+                                    </div>
+                                </div>
+
+                                <!-- Insurance -->
+                                <div class="bg-gray-800/50 rounded p-3">
+                                    <label class="text-sm font-semibold text-gray-300">Insurance</label>
+                                    <div class="text-center text-lg font-bold text-white mb-2" id="insuranceValue">$100</div>
+                                    <input type="range" id="insuranceSlider" min="0" max="180" step="20" value="100"
+                                        class="w-full h-2 bg-gray-700 rounded cursor-pointer slider-small">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                        <span>$0</span>
+                                        <span>$180</span>
+                                    </div>
+                                </div>
+
+                                <!-- Phone/Internet -->
+                                <div class="bg-gray-800/50 rounded p-3">
+                                    <label class="text-sm font-semibold text-gray-300">Phone/Internet</label>
+                                    <div class="text-center text-lg font-bold text-white mb-2" id="phoneValue">$80</div>
+                                    <input type="range" id="phoneSlider" min="40" max="100" step="10" value="80"
+                                        class="w-full h-2 bg-gray-700 rounded cursor-pointer slider-small">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                        <span>$40</span>
+                                        <span>$100</span>
+                                    </div>
+                                </div>
+
+                                <!-- Medical -->
+                                <div class="bg-gray-800/50 rounded p-3">
+                                    <label class="text-sm font-semibold text-gray-300">Medical</label>
+                                    <div class="text-center text-lg font-bold text-white mb-2" id="medicalValue">$200</div>
+                                    <input type="range" id="medicalSlider" min="0" max="300" step="25" value="200"
+                                        class="w-full h-2 bg-gray-700 rounded cursor-pointer slider-small">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                        <span>$0</span>
+                                        <span>$300</span>
+                                    </div>
+                                </div>
+
+                                <!-- Transportation -->
+                                <div class="bg-gray-800/50 rounded p-3">
+                                    <label class="text-sm font-semibold text-gray-300">Transportation</label>
+                                    <div class="text-center text-lg font-bold text-white mb-2" id="transportValue">$150</div>
+                                    <input type="range" id="transportSlider" min="100" max="200" step="25" value="150"
+                                        class="w-full h-2 bg-gray-700 rounded cursor-pointer slider-small">
+                                    <div class="flex justify-between text-xs text-gray-400 mt-1">
+                                        <span>$100</span>
+                                        <span>$200</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="text-red-400 font-bold text-center text-lg">Total Monthly Basics: <span id="totalBasics">$1,730</span></p>
+                            <p class="text-yellow-400 font-bold text-center text-xl">Money Left Over: <span id="leftoverMonthly">$770</span>/month</p>
+                        </div>
+
+                        <!-- Dynamic Status Message -->
+                        <div id="financialStatus" class="bg-orange-500/30 rounded-lg p-4 mb-4 border-2 border-orange-500">
+                            <p class="text-xl font-bold text-orange-300">You can afford some basics, but no luxuries or emergencies.</p>
+                        </div>
+
+                        <p class="text-red-400 font-bold">The cruel trade-off: More cash but no space for family, or some space but no cash!</p>
+                    </div>
