@@ -1547,42 +1547,62 @@ function updateBackgroundColors(colorScheme) {
     root.style.setProperty('--orb-accent', colorScheme.accent);
 }
 
-// Black Hole Animation System
+// 3D Black Hole Animation System using Three.js
+let blackHoleScene, blackHoleCamera, blackHoleRenderer, blackHoleParticles = [];
+let accretionDisk, eventHorizon, blackHoleVoid;
+let isBlackHoleActive = false;
+
 function initializeBlackHole() {
-    const blackHoleContainer = document.getElementById('black-hole-container');
+    const canvas = document.getElementById('black-hole-canvas');
     const problemSection = document.getElementById('problem-section');
 
-    if (!blackHoleContainer || !problemSection) return;
+    if (!canvas || !problemSection || !window.THREE) return;
 
-    // Set up intersection observer for black hole activation
+    // Initialize Three.js scene
+    blackHoleScene = new THREE.Scene();
+    blackHoleCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    blackHoleRenderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+    blackHoleRenderer.setSize(window.innerWidth, window.innerHeight);
+    blackHoleRenderer.setClearColor(0x000000, 0);
+
+    // Position camera for side view like Interstellar
+    blackHoleCamera.position.set(0, 2, 8);
+    blackHoleCamera.lookAt(0, 0, 0);
+
+    // Create black hole components
+    createBlackHoleVoid();
+    createEventHorizon();
+    createAccretionDisk();
+    createParticleSystem();
+    createRotatingLights();
+
+    // Set up intersection observer
     const blackHoleObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Calculate how much of the problem section is visible
                 const intersectionRatio = entry.intersectionRatio;
-                const scrollProgress = Math.min(intersectionRatio * 2, 1); // Amplify the effect
+                const scrollProgress = Math.min(intersectionRatio * 2, 1);
 
-                // Activate black hole based on scroll progress
                 if (scrollProgress > 0.1) {
-                    blackHoleContainer.classList.add('active');
-                    blackHoleContainer.style.opacity = scrollProgress;
+                    canvas.classList.add('active');
+                    canvas.style.opacity = scrollProgress;
                     document.body.classList.add('black-hole-active');
+                    isBlackHoleActive = true;
 
-                    // Fade out orbs as black hole intensifies
                     fadeOrbsForBlackHole(scrollProgress);
                 } else {
-                    blackHoleContainer.classList.remove('active');
-                    blackHoleContainer.style.opacity = 0;
+                    canvas.classList.remove('active');
+                    canvas.style.opacity = 0;
                     document.body.classList.remove('black-hole-active');
+                    isBlackHoleActive = false;
 
-                    // Restore orbs
                     fadeOrbsForBlackHole(0);
                 }
             } else {
-                // Section not visible, hide black hole
-                blackHoleContainer.classList.remove('active');
-                blackHoleContainer.style.opacity = 0;
+                canvas.classList.remove('active');
+                canvas.style.opacity = 0;
                 document.body.classList.remove('black-hole-active');
+                isBlackHoleActive = false;
                 fadeOrbsForBlackHole(0);
             }
         });
@@ -1591,26 +1611,468 @@ function initializeBlackHole() {
         rootMargin: '0px'
     });
 
-    // Observe the problem section
     blackHoleObserver.observe(problemSection);
+
+    // Start animation loop
+    animateBlackHole();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        blackHoleCamera.aspect = window.innerWidth / window.innerHeight;
+        blackHoleCamera.updateProjectionMatrix();
+        blackHoleRenderer.setSize(window.innerWidth, window.innerHeight);
+    });
+}
+
+function createBlackHoleVoid() {
+    const geometry = new THREE.SphereGeometry(0.5, 32, 32);
+    const material = new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        transparent: true,
+        opacity: 1
+    });
+    blackHoleVoid = new THREE.Mesh(geometry, material);
+    blackHoleScene.add(blackHoleVoid);
+}
+
+function createEventHorizon() {
+    const geometry = new THREE.SphereGeometry(0.8, 32, 32);
+    const material = new THREE.MeshBasicMaterial({
+        color: 0x8b0000,
+        transparent: true,
+        opacity: 0.3,
+        side: THREE.DoubleSide
+    });
+    eventHorizon = new THREE.Mesh(geometry, material);
+    blackHoleScene.add(eventHorizon);
+}
+
+function createAccretionDisk() {
+    const diskGroup = new THREE.Group();
+
+    // Create multiple shiny rings for the accretion disk
+    for (let i = 0; i < 4; i++) {
+        const radius = 1.2 + i * 0.6;
+        const geometry = new THREE.RingGeometry(radius, radius + 0.4, 128);
+
+        // Create brilliant shiny colors
+        const colors = [
+            [1.0, 1.0, 0.8], // Brilliant white-gold
+            [1.0, 0.9, 0.4], // Bright golden
+            [1.0, 0.7, 0.3], // Intense orange
+            [1.0, 0.4, 0.1]  // Glowing red-orange
+        ];
+
+        // Create shiny material with emissive glow
+        const material = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(...colors[i]),
+            transparent: true,
+            opacity: 0.8 - i * 0.15,
+            side: THREE.DoubleSide,
+            // Add emissive glow for shiny effect
+            emissive: new THREE.Color(...colors[i]).multiplyScalar(0.3),
+            blending: THREE.AdditiveBlending
+        });
+
+        const ring = new THREE.Mesh(geometry, material);
+        ring.rotation.x = -Math.PI / 2; // Flatten the disk
+        ring.userData = {
+            rotationSpeed: 0.015 + i * 0.008,
+            originalColor: colors[i],
+            glowPhase: Math.random() * Math.PI * 2
+        };
+        diskGroup.add(ring);
+    }
+
+    accretionDisk = diskGroup;
+    blackHoleScene.add(accretionDisk);
+}
+
+function createParticleSystem() {
+    const particleCount = 300;
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array(particleCount * 3);
+    const colors = new Float32Array(particleCount * 3);
+    const velocities = new Float32Array(particleCount * 3);
+    const sizes = new Float32Array(particleCount);
+    const glowPhases = new Float32Array(particleCount);
+
+    for (let i = 0; i < particleCount; i++) {
+        const i3 = i * 3;
+
+        // Start particles at random positions around the black hole
+        const radius = 6 + Math.random() * 12;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = (Math.random() - 0.5) * Math.PI * 0.6;
+
+        positions[i3] = radius * Math.cos(theta) * Math.cos(phi);
+        positions[i3 + 1] = radius * Math.sin(phi);
+        positions[i3 + 2] = radius * Math.sin(theta) * Math.cos(phi);
+
+        // Brilliant shiny colors (bright whites, golds, oranges)
+        const colorType = Math.random();
+        if (colorType < 0.3) {
+            // Brilliant white-gold particles
+            colors[i3] = 1.0;
+            colors[i3 + 1] = 1.0;
+            colors[i3 + 2] = 0.8;
+        } else if (colorType < 0.6) {
+            // Bright golden particles
+            colors[i3] = 1.0;
+            colors[i3 + 1] = 0.8;
+            colors[i3 + 2] = 0.3;
+        } else {
+            // Glowing orange particles
+            colors[i3] = 1.0;
+            colors[i3 + 1] = 0.6;
+            colors[i3 + 2] = 0.2;
+        }
+
+        // Varying particle sizes for more visual interest
+        sizes[i] = 0.1 + Math.random() * 0.3;
+
+        // Random glow phases for twinkling effect
+        glowPhases[i] = Math.random() * Math.PI * 2;
+
+        // Initial velocities
+        velocities[i3] = 0;
+        velocities[i3 + 1] = 0;
+        velocities[i3 + 2] = 0;
+    }
+
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+    geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+    geometry.setAttribute('glowPhase', new THREE.BufferAttribute(glowPhases, 1));
+
+    // Create brilliant shiny material with additive blending
+    const material = new THREE.PointsMaterial({
+        size: 0.2,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.9,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true,
+        map: createGlowTexture()
+    });
+
+    const particles = new THREE.Points(geometry, material);
+    blackHoleParticles.push(particles);
+    blackHoleScene.add(particles);
+
+    // Create light trails system
+    createLightTrails();
+}
+
+function createGlowTexture() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 64;
+    canvas.height = 64;
+    const context = canvas.getContext('2d');
+
+    // Create radial gradient for glow effect
+    const gradient = context.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gradient.addColorStop(0, 'rgba(255, 255, 255, 1)');
+    gradient.addColorStop(0.2, 'rgba(255, 255, 255, 0.8)');
+    gradient.addColorStop(0.4, 'rgba(255, 200, 100, 0.6)');
+    gradient.addColorStop(0.7, 'rgba(255, 150, 50, 0.3)');
+    gradient.addColorStop(1, 'rgba(255, 100, 0, 0)');
+
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, 64, 64);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    return texture;
+}
+
+function createLightTrails() {
+    // Create light trails that follow particles
+    const trailCount = 50;
+    const trailGeometry = new THREE.BufferGeometry();
+    const trailPositions = new Float32Array(trailCount * 6); // 2 points per trail
+    const trailColors = new Float32Array(trailCount * 6);
+
+    for (let i = 0; i < trailCount * 6; i += 6) {
+        // Initialize trail positions
+        trailPositions[i] = 0;
+        trailPositions[i + 1] = 0;
+        trailPositions[i + 2] = 0;
+        trailPositions[i + 3] = 0;
+        trailPositions[i + 4] = 0;
+        trailPositions[i + 5] = 0;
+
+        // Bright trail colors
+        trailColors[i] = 1.0;
+        trailColors[i + 1] = 0.8;
+        trailColors[i + 2] = 0.4;
+        trailColors[i + 3] = 1.0;
+        trailColors[i + 4] = 0.6;
+        trailColors[i + 5] = 0.2;
+    }
+
+    trailGeometry.setAttribute('position', new THREE.BufferAttribute(trailPositions, 3));
+    trailGeometry.setAttribute('color', new THREE.BufferAttribute(trailColors, 3));
+
+    const trailMaterial = new THREE.LineBasicMaterial({
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.6,
+        blending: THREE.AdditiveBlending
+    });
+
+    const trails = new THREE.LineSegments(trailGeometry, trailMaterial);
+    blackHoleParticles.push(trails);
+    blackHoleScene.add(trails);
+}
+
+function animateBlackHole() {
+    if (!isBlackHoleActive) {
+        requestAnimationFrame(animateBlackHole);
+        return;
+    }
+
+    const time = Date.now() * 0.001;
+
+    // Animate shiny accretion disk with pulsing glow
+    if (accretionDisk) {
+        accretionDisk.children.forEach((ring, index) => {
+            // Rotate rings at different speeds
+            ring.rotation.z += ring.userData.rotationSpeed * (index % 2 === 0 ? 1 : -1);
+
+            // Add pulsing glow effect
+            ring.userData.glowPhase += 0.02;
+            const glowIntensity = 0.3 + 0.2 * Math.sin(ring.userData.glowPhase);
+            const originalColor = ring.userData.originalColor;
+
+            ring.material.emissive.setRGB(
+                originalColor[0] * glowIntensity,
+                originalColor[1] * glowIntensity,
+                originalColor[2] * glowIntensity
+            );
+
+            // Vary opacity for shimmer effect
+            ring.material.opacity = (0.8 - index * 0.15) + 0.1 * Math.sin(time * 2 + index);
+        });
+    }
+
+    // Animate brilliant particles with enhanced physics
+    blackHoleParticles.forEach((particleSystem) => {
+        if (particleSystem.type !== 'Points') return; // Skip trail systems
+
+        const positions = particleSystem.geometry.attributes.position.array;
+        const velocities = particleSystem.geometry.attributes.velocity.array;
+        const colors = particleSystem.geometry.attributes.color.array;
+        const glowPhases = particleSystem.geometry.attributes.glowPhase.array;
+
+        for (let i = 0; i < positions.length; i += 3) {
+            const particleIndex = i / 3;
+            const x = positions[i];
+            const y = positions[i + 1];
+            const z = positions[i + 2];
+
+            // Calculate distance from black hole center
+            const distance = Math.sqrt(x * x + y * y + z * z);
+
+            if (distance < 0.7) {
+                // Reset particle to outer edge when it gets too close
+                const radius = 8 + Math.random() * 8;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = (Math.random() - 0.5) * Math.PI * 0.6;
+
+                positions[i] = radius * Math.cos(theta) * Math.cos(phi);
+                positions[i + 1] = radius * Math.sin(phi);
+                positions[i + 2] = radius * Math.sin(theta) * Math.cos(phi);
+
+                velocities[i] = 0;
+                velocities[i + 1] = 0;
+                velocities[i + 2] = 0;
+            } else {
+                // Enhanced gravitational force
+                const force = 0.002 / (distance * distance);
+                const dirX = -x / distance;
+                const dirY = -y / distance;
+                const dirZ = -z / distance;
+
+                velocities[i] += dirX * force;
+                velocities[i + 1] += dirY * force;
+                velocities[i + 2] += dirZ * force;
+
+                // Enhanced orbital motion for more dramatic spiraling
+                const orbitalForce = 0.004 / distance;
+                velocities[i] += -z * orbitalForce;
+                velocities[i + 2] += x * orbitalForce;
+
+                // Update positions
+                positions[i] += velocities[i];
+                positions[i + 1] += velocities[i + 1];
+                positions[i + 2] += velocities[i + 2];
+
+                // Add some damping
+                velocities[i] *= 0.995;
+                velocities[i + 1] *= 0.995;
+                velocities[i + 2] *= 0.995;
+            }
+
+            // Animate particle glow and brightness
+            glowPhases[particleIndex] += 0.05;
+            const glowIntensity = 0.7 + 0.3 * Math.sin(glowPhases[particleIndex]);
+
+            // Make particles brighter as they get closer to the black hole
+            const proximityBrightness = Math.max(0.5, 2.0 / distance);
+
+            // Update particle colors with glow effect
+            const baseR = colors[i];
+            const baseG = colors[i + 1];
+            const baseB = colors[i + 2];
+
+            colors[i] = Math.min(1.0, baseR * glowIntensity * proximityBrightness);
+            colors[i + 1] = Math.min(1.0, baseG * glowIntensity * proximityBrightness);
+            colors[i + 2] = Math.min(1.0, baseB * glowIntensity * proximityBrightness);
+        }
+
+        particleSystem.geometry.attributes.position.needsUpdate = true;
+        particleSystem.geometry.attributes.color.needsUpdate = true;
+        particleSystem.geometry.attributes.glowPhase.needsUpdate = true;
+    });
+
+    // Update light trails
+    updateLightTrails();
+
+    // Animate rotating lights
+    animateRotatingLights(time);
+
+    blackHoleRenderer.render(blackHoleScene, blackHoleCamera);
+    requestAnimationFrame(animateBlackHole);
+}
+
+function updateLightTrails() {
+    // Find the trail system
+    const trailSystem = blackHoleParticles.find(system => system.type === 'LineSegments');
+    if (!trailSystem) return;
+
+    const particleSystem = blackHoleParticles.find(system => system.type === 'Points');
+    if (!particleSystem) return;
+
+    const particlePositions = particleSystem.geometry.attributes.position.array;
+    const trailPositions = trailSystem.geometry.attributes.position.array;
+
+    // Update trail positions to follow particles
+    for (let i = 0; i < Math.min(trailPositions.length / 6, particlePositions.length / 3); i++) {
+        const particleIndex = i * 3;
+        const trailIndex = i * 6;
+
+        // Current particle position
+        const px = particlePositions[particleIndex];
+        const py = particlePositions[particleIndex + 1];
+        const pz = particlePositions[particleIndex + 2];
+
+        // Calculate trail start position (slightly behind particle)
+        const distance = Math.sqrt(px * px + py * py + pz * pz);
+        const trailLength = 0.5;
+
+        trailPositions[trailIndex] = px;
+        trailPositions[trailIndex + 1] = py;
+        trailPositions[trailIndex + 2] = pz;
+
+        // Trail end position
+        trailPositions[trailIndex + 3] = px + (px / distance) * trailLength;
+        trailPositions[trailIndex + 4] = py + (py / distance) * trailLength;
+        trailPositions[trailIndex + 5] = pz + (pz / distance) * trailLength;
+    }
+
+    trailSystem.geometry.attributes.position.needsUpdate = true;
+}
+
+function createRotatingLights() {
+    // Create rotating point lights around the accretion disk
+    const lightGroup = new THREE.Group();
+
+    for (let i = 0; i < 6; i++) {
+        const light = new THREE.PointLight(0xffffff, 2, 10);
+        const angle = (i / 6) * Math.PI * 2;
+        const radius = 3;
+
+        light.position.set(
+            Math.cos(angle) * radius,
+            0.2,
+            Math.sin(angle) * radius
+        );
+
+        // Create light colors that match the accretion disk
+        const colors = [0xffffff, 0xffdd88, 0xff8844, 0xff4422, 0xffaa66, 0xffcc99];
+        light.color.setHex(colors[i]);
+
+        light.userData = {
+            angle: angle,
+            radius: radius,
+            rotationSpeed: 0.01 + i * 0.002
+        };
+
+        lightGroup.add(light);
+
+        // Add light helper spheres for visual effect
+        const helperGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+        const helperMaterial = new THREE.MeshBasicMaterial({
+            color: colors[i],
+            transparent: true,
+            opacity: 0.8,
+            emissive: colors[i],
+            emissiveIntensity: 0.5
+        });
+        const helper = new THREE.Mesh(helperGeometry, helperMaterial);
+        helper.position.copy(light.position);
+        helper.userData = light.userData;
+        lightGroup.add(helper);
+    }
+
+    blackHoleScene.add(lightGroup);
+    blackHoleScene.userData.lightGroup = lightGroup;
+}
+
+function animateRotatingLights(time) {
+    const lightGroup = blackHoleScene.userData.lightGroup;
+    if (!lightGroup) return;
+
+    lightGroup.children.forEach((child, index) => {
+        if (child.userData.angle !== undefined) {
+            // Update rotation angle
+            child.userData.angle += child.userData.rotationSpeed;
+
+            // Calculate new position
+            const radius = child.userData.radius + 0.5 * Math.sin(time * 2 + index);
+            const height = 0.2 + 0.3 * Math.sin(time * 3 + index * 0.5);
+
+            child.position.set(
+                Math.cos(child.userData.angle) * radius,
+                height,
+                Math.sin(child.userData.angle) * radius
+            );
+
+            // Pulse light intensity
+            if (child.isPointLight) {
+                child.intensity = 1.5 + 0.5 * Math.sin(time * 4 + index);
+            }
+
+            // Pulse helper sphere glow
+            if (child.material && child.material.emissiveIntensity !== undefined) {
+                child.material.emissiveIntensity = 0.3 + 0.4 * Math.sin(time * 5 + index);
+                child.scale.setScalar(1 + 0.3 * Math.sin(time * 6 + index));
+            }
+        }
+    });
 }
 
 function fadeOrbsForBlackHole(blackHoleIntensity) {
     const orbs = document.querySelectorAll('.background-orb');
     const root = document.documentElement;
 
-    // Calculate orb opacity - fade out as black hole intensifies
     const orbOpacity = Math.max(0.05, 0.4 - (blackHoleIntensity * 0.35));
-
-    // Update CSS custom property for smooth transition
     root.style.setProperty('--orb-opacity', orbOpacity);
 
     orbs.forEach((orb) => {
-        // Add gravitational pull effect toward center
         if (blackHoleIntensity > 0.3) {
             const pullStrength = (blackHoleIntensity - 0.3) * 1.5;
-
-            // Calculate pull direction toward screen center
             const rect = orb.getBoundingClientRect();
             const orbCenterX = rect.left + rect.width / 2;
             const orbCenterY = rect.top + rect.height / 2;
@@ -1620,14 +2082,11 @@ function fadeOrbsForBlackHole(blackHoleIntensity) {
             const pullX = (screenCenterX - orbCenterX) * pullStrength * 0.05;
             const pullY = (screenCenterY - orbCenterY) * pullStrength * 0.05;
 
-            // Apply gravitational distortion
             orb.style.transform = `translate(${pullX}px, ${pullY}px) scale(${1 - pullStrength * 0.1})`;
 
-            // Darken orb colors as they get pulled in
             const darkenFactor = 1 - (pullStrength * 0.3);
             orb.style.filter = `brightness(${darkenFactor}) blur(${150 + pullStrength * 50}px)`;
         } else {
-            // Reset transform and filter when black hole is not active
             orb.style.transform = '';
             orb.style.filter = 'blur(150px)';
         }
