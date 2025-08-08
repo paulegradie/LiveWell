@@ -6,10 +6,9 @@ class SectionLoader {
             { id: 'problem-section', file: 'sections/problem.html' },
             { id: 'solution-section', file: 'sections/solution.html' },
             { id: 'paul-message-section', file: 'sections/paul-message.html' },
-            { id: 'lifestyle-section', file: 'sections/lifestyle.html' },
             { id: 'how-it-works-section', file: 'sections/how-it-works.html' },
-            { id: 'final-choice-section', file: 'sections/final-choice.html' },
-            { id: 'family-trust-section', file: 'sections/family-trust.html' }
+            { id: 'family-trust-section', file: 'sections/family-trust.html' },
+            { id: 'lifestyle-section', file: 'sections/lifestyle.html' }
         ];
     }
 
