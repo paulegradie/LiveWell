@@ -1677,7 +1677,7 @@ function createAccretionDisk() {
         const ring = new THREE.Mesh(geometry, material);
         ring.rotation.x = -Math.PI / 2; // Flatten the disk
         ring.userData = {
-            rotationSpeed: 0.015 + i * 0.008,
+            rotationSpeed: 0.03 + i * 0.015,
             originalColor: colors[i],
             glowPhase: Math.random() * Math.PI * 2
         };
@@ -1689,7 +1689,7 @@ function createAccretionDisk() {
 }
 
 function createParticleSystem() {
-    const particleCount = 300;
+    const particleCount = 600;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(particleCount * 3);
     const colors = new Float32Array(particleCount * 3);
@@ -1729,15 +1729,16 @@ function createParticleSystem() {
         }
 
         // Varying particle sizes for more visual interest
-        sizes[i] = 0.1 + Math.random() * 0.3;
+        sizes[i] = 0.15 + Math.random() * 0.35;
 
         // Random glow phases for twinkling effect
         glowPhases[i] = Math.random() * Math.PI * 2;
 
         // Initial velocities
-        velocities[i3] = 0;
+        // Give particles an initial orbital velocity for visible spiraling
+        velocities[i3] = -Math.sin(theta) * 0.02;
         velocities[i3 + 1] = 0;
-        velocities[i3 + 2] = 0;
+        velocities[i3 + 2] = Math.cos(theta) * 0.02;
     }
 
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -1889,7 +1890,7 @@ function animateBlackHole() {
                 velocities[i + 2] = 0;
             } else {
                 // Enhanced gravitational force
-                const force = 0.002 / (distance * distance);
+                const force = 0.006 / (distance * distance);
                 const dirX = -x / distance;
                 const dirY = -y / distance;
                 const dirZ = -z / distance;
@@ -1899,7 +1900,7 @@ function animateBlackHole() {
                 velocities[i + 2] += dirZ * force;
 
                 // Enhanced orbital motion for more dramatic spiraling
-                const orbitalForce = 0.004 / distance;
+                const orbitalForce = 0.015 / distance;
                 velocities[i] += -z * orbitalForce;
                 velocities[i + 2] += x * orbitalForce;
 
@@ -1915,7 +1916,7 @@ function animateBlackHole() {
             }
 
             // Animate particle glow and brightness
-            glowPhases[particleIndex] += 0.05;
+            glowPhases[particleIndex] += 0.1;
             const glowIntensity = 0.7 + 0.3 * Math.sin(glowPhases[particleIndex]);
 
             // Make particles brighter as they get closer to the black hole
