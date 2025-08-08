@@ -44,6 +44,58 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeIrajCalculator();
 });
 
+// Accordion functionality
+function toggleAccordion(accordionId) {
+    const content = document.getElementById(accordionId);
+    const icon = document.getElementById(accordionId.replace('-accordion', '-icon'));
+
+    if (content && icon) {
+        if (content.classList.contains('hidden')) {
+            // Open accordion
+            content.classList.remove('hidden');
+            content.classList.add('block');
+            icon.textContent = '−';
+
+            // Add smooth slide down animation
+            content.style.maxHeight = '0px';
+            content.style.overflow = 'hidden';
+            content.style.transition = 'max-height 0.3s ease-out';
+
+            // Force reflow then set max-height
+            setTimeout(() => {
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }, 10);
+
+            // Remove max-height after animation
+            setTimeout(() => {
+                content.style.maxHeight = 'none';
+                content.style.overflow = 'visible';
+            }, 300);
+        } else {
+            // Close accordion
+            content.style.maxHeight = content.scrollHeight + 'px';
+            content.style.overflow = 'hidden';
+            content.style.transition = 'max-height 0.3s ease-out';
+
+            // Force reflow then collapse
+            setTimeout(() => {
+                content.style.maxHeight = '0px';
+            }, 10);
+
+            // Hide after animation
+            setTimeout(() => {
+                content.classList.add('hidden');
+                content.classList.remove('block');
+                content.style.maxHeight = '';
+                content.style.overflow = '';
+                content.style.transition = '';
+            }, 300);
+
+            icon.textContent = '+';
+        }
+    }
+}
+
 // Navigation functionality
 function initializeNavigation() {
     // Smooth scrolling for navigation links
