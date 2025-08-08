@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeProgressBar();
     initializeAnimations();
     initializeComparison();
-    initializeMermaidDiagram();
-    initializeFamilyTrustDiagram();
+    // initializeMermaidDiagram(); // Commented out for testing
+    // initializeFamilyTrustDiagram(); // Commented out for testing
     initializeCounters();
     initializeWealthChart();
 
@@ -42,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeVisualEffects();
     initializeApartmentCalculator();
     initializeIrajCalculator();
+    initializeDynamicBackground();
+    initializeBlackHole();
 });
 
 // Accordion functionality
@@ -1329,7 +1331,6 @@ function updateIrajCalculation() {
     document.getElementById('irajLeftoverText').textContent = `$${(leftoverFromSale/1000)}k left after property`;
     document.getElementById('irajSuperText').textContent = `$${(superAmount/1000)}k super`;
     document.getElementById('irajTotalText').textContent = `$${(totalSavings/1000)}k total savings`;
-    document.getElementById('irajYearlyText').textContent = `$${(totalSavings/1000)}k ÷ 20 years = $${Math.round(yearlyFromSavings/1000)}k/year`;
 
     // Update the new Available Funds elements
     document.getElementById('irajTotalMonthlyIncome').textContent = `$${Math.round(totalMonthlyIncomeFromPensionAndSavings).toLocaleString()}/month total income`;
@@ -1430,4 +1431,205 @@ function updateIrajFinancialStatus(monthlyLeftover, tutoringIncome, propertyCost
 
     statusElement.className = `${bgColor} rounded-lg p-4 mb-4 border-2 ${borderColor}`;
     statusElement.innerHTML = `<p class="text-xl font-bold ${textColor}">${message}</p>`;
+}
+
+// Dynamic Background Color Evolution with Catppuccin Palette
+function initializeDynamicBackground() {
+    // Sophisticated color schemes using Catppuccin Mocha palette
+    const colorSchemes = {
+        'hero-section': {
+            primary: '#f38ba8',    // Catppuccin Red - stop banks
+            secondary: '#a6e3a1',  // Catppuccin Green - start earning
+            accent: '#fab387'      // Catppuccin Peach - urgency
+        },
+        'problem-section': {
+            primary: '#8b0000',    // Dark Red - approaching void
+            secondary: '#4a0000',  // Darker Red - financial drain
+            accent: '#2d0000'      // Almost Black - the void approaches
+        },
+        'solution-section': {
+            primary: '#a6e3a1',    // Catppuccin Green - growth
+            secondary: '#94e2d5',  // Catppuccin Teal - fresh start
+            accent: '#89dceb'      // Catppuccin Sky - clarity
+        },
+        'paul-message-section': {
+            primary: '#cba6f7',    // Catppuccin Mauve - personal
+            secondary: '#89b4fa',  // Catppuccin Blue - trust
+            accent: '#b4befe'      // Catppuccin Lavender - hope
+        },
+        'lifestyle-section': {
+            primary: '#cba6f7',    // Catppuccin Mauve - luxury
+            secondary: '#f5c2e7',  // Catppuccin Pink - joy
+            accent: '#89dceb'      // Catppuccin Sky - freedom
+        },
+        'how-it-works-section': {
+            primary: '#89b4fa',    // Catppuccin Blue - process
+            secondary: '#74c7ec',  // Catppuccin Sapphire - clarity
+            accent: '#94e2d5'      // Catppuccin Teal - sophistication
+        },
+        'final-choice-section': {
+            primary: '#fab387',    // Catppuccin Peach - decision time
+            secondary: '#f38ba8',  // Catppuccin Red - urgency
+            accent: '#a6e3a1'      // Catppuccin Green - opportunity
+        },
+        'family-trust-section': {
+            primary: '#f9e2af',    // Catppuccin Yellow - wealth
+            secondary: '#cba6f7',  // Catppuccin Mauve - luxury
+            accent: '#89b4fa'      // Catppuccin Blue - trust/stability
+        }
+    };
+
+    // Set up intersection observer for smoother section detection
+    const observerOptions = {
+        threshold: [0.1, 0.3, 0.5, 0.7],
+        rootMargin: '-10% 0px -10% 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+                const sectionId = entry.target.id;
+                const colorScheme = colorSchemes[sectionId];
+
+                if (colorScheme) {
+                    updateBackgroundColors(colorScheme);
+
+                    // Special handling for problem section (black hole zone)
+                    if (sectionId === 'problem-section') {
+                        // Darken orbs significantly for black hole effect
+                        const root = document.documentElement;
+                        root.style.setProperty('--orb-opacity', '0.2');
+                    } else {
+                        // Restore normal orb opacity for other sections
+                        const root = document.documentElement;
+                        root.style.setProperty('--orb-opacity', '0.4');
+                    }
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observe all main sections
+    Object.keys(colorSchemes).forEach(sectionId => {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            observer.observe(section);
+        }
+    });
+
+    // Add parallax effect to orbs
+    initializeParallaxEffects();
+}
+
+function initializeParallaxEffects() {
+    const orbs = document.querySelectorAll('.background-orb');
+
+    window.addEventListener('scroll', () => {
+        const scrollY = window.scrollY;
+
+        orbs.forEach((orb, index) => {
+            // Different parallax speeds for each orb
+            const speed = 0.1 + (index * 0.05);
+            const yPos = -(scrollY * speed);
+            const xPos = Math.sin(scrollY * 0.001 + index) * 20;
+
+            orb.style.transform = `translate3d(${xPos}px, ${yPos}px, 0) scale(${1 + Math.sin(scrollY * 0.002 + index) * 0.1})`;
+        });
+    });
+}
+
+function updateBackgroundColors(colorScheme) {
+    const root = document.documentElement;
+
+    // Update CSS custom properties with smooth transition
+    root.style.setProperty('--orb-primary', colorScheme.primary);
+    root.style.setProperty('--orb-secondary', colorScheme.secondary);
+    root.style.setProperty('--orb-accent', colorScheme.accent);
+}
+
+// Black Hole Animation System
+function initializeBlackHole() {
+    const blackHoleContainer = document.getElementById('black-hole-container');
+    const problemSection = document.getElementById('problem-section');
+
+    if (!blackHoleContainer || !problemSection) return;
+
+    // Set up intersection observer for black hole activation
+    const blackHoleObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Calculate how much of the problem section is visible
+                const intersectionRatio = entry.intersectionRatio;
+                const scrollProgress = Math.min(intersectionRatio * 2, 1); // Amplify the effect
+
+                // Activate black hole based on scroll progress
+                if (scrollProgress > 0.1) {
+                    blackHoleContainer.classList.add('active');
+                    blackHoleContainer.style.opacity = scrollProgress;
+                    document.body.classList.add('black-hole-active');
+
+                    // Fade out orbs as black hole intensifies
+                    fadeOrbsForBlackHole(scrollProgress);
+                } else {
+                    blackHoleContainer.classList.remove('active');
+                    blackHoleContainer.style.opacity = 0;
+                    document.body.classList.remove('black-hole-active');
+
+                    // Restore orbs
+                    fadeOrbsForBlackHole(0);
+                }
+            } else {
+                // Section not visible, hide black hole
+                blackHoleContainer.classList.remove('active');
+                blackHoleContainer.style.opacity = 0;
+                document.body.classList.remove('black-hole-active');
+                fadeOrbsForBlackHole(0);
+            }
+        });
+    }, {
+        threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+        rootMargin: '0px'
+    });
+
+    // Observe the problem section
+    blackHoleObserver.observe(problemSection);
+}
+
+function fadeOrbsForBlackHole(blackHoleIntensity) {
+    const orbs = document.querySelectorAll('.background-orb');
+    const root = document.documentElement;
+
+    // Calculate orb opacity - fade out as black hole intensifies
+    const orbOpacity = Math.max(0.05, 0.4 - (blackHoleIntensity * 0.35));
+
+    // Update CSS custom property for smooth transition
+    root.style.setProperty('--orb-opacity', orbOpacity);
+
+    orbs.forEach((orb) => {
+        // Add gravitational pull effect toward center
+        if (blackHoleIntensity > 0.3) {
+            const pullStrength = (blackHoleIntensity - 0.3) * 1.5;
+
+            // Calculate pull direction toward screen center
+            const rect = orb.getBoundingClientRect();
+            const orbCenterX = rect.left + rect.width / 2;
+            const orbCenterY = rect.top + rect.height / 2;
+            const screenCenterX = window.innerWidth / 2;
+            const screenCenterY = window.innerHeight / 2;
+
+            const pullX = (screenCenterX - orbCenterX) * pullStrength * 0.05;
+            const pullY = (screenCenterY - orbCenterY) * pullStrength * 0.05;
+
+            // Apply gravitational distortion
+            orb.style.transform = `translate(${pullX}px, ${pullY}px) scale(${1 - pullStrength * 0.1})`;
+
+            // Darken orb colors as they get pulled in
+            const darkenFactor = 1 - (pullStrength * 0.3);
+            orb.style.filter = `brightness(${darkenFactor}) blur(${150 + pullStrength * 50}px)`;
+        } else {
+            // Reset transform and filter when black hole is not active
+            orb.style.transform = '';
+            orb.style.filter = 'blur(150px)';
+        }
+    });
 }

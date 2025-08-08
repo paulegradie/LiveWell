@@ -1,12 +1,126 @@
 /* Financial Strategy Planning - Custom Styles */
 
+/* Dynamic Background System - Catppuccin Mocha Palette */
+:root {
+    --orb-primary: #f38ba8;    /* Catppuccin Red */
+    --orb-secondary: #a6e3a1;  /* Catppuccin Green */
+    --orb-accent: #fab387;     /* Catppuccin Peach */
+    --orb-opacity: 0.4;
+
+    /* Catppuccin Mocha Color Palette */
+    --ctp-rosewater: #f5e0dc;
+    --ctp-flamingo: #f2cdcd;
+    --ctp-pink: #f5c2e7;
+    --ctp-mauve: #cba6f7;
+    --ctp-red: #f38ba8;
+    --ctp-maroon: #eba0ac;
+    --ctp-peach: #fab387;
+    --ctp-yellow: #f9e2af;
+    --ctp-green: #a6e3a1;
+    --ctp-teal: #94e2d5;
+    --ctp-sky: #89dceb;
+    --ctp-sapphire: #74c7ec;
+    --ctp-blue: #89b4fa;
+    --ctp-lavender: #b4befe;
+}
+
 /* Tailwind Configuration */
 body {
     font-family: 'Inter', sans-serif;
+    background: #0a0a0f;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Dynamic Background Orbs */
+.dynamic-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.background-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: var(--orb-opacity);
+    animation: float 15s ease-in-out infinite;
+    transition: all 3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, background;
+}
+
+.orb-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--orb-primary) 0%, transparent 70%);
+    top: -200px;
+    left: -200px;
+    animation-duration: 12s;
+    animation-delay: 0s;
+}
+
+.orb-2 {
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, var(--orb-secondary) 0%, transparent 70%);
+    top: 20%;
+    right: -300px;
+    animation-duration: 18s;
+    animation-delay: 3s;
+}
+
+.orb-3 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--orb-accent) 0%, transparent 70%);
+    bottom: 10%;
+    left: 10%;
+    animation-duration: 14s;
+    animation-delay: 6s;
+}
+
+.orb-4 {
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, var(--orb-primary) 0%, transparent 70%);
+    top: 60%;
+    right: 20%;
+    animation-duration: 16s;
+    animation-delay: 2s;
+}
+
+.orb-5 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--orb-secondary) 0%, transparent 70%);
+    bottom: -100px;
+    right: -150px;
+    animation-duration: 20s;
+    animation-delay: 8s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    25% {
+        transform: translate(30px, -40px) scale(1.1);
+    }
+    50% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    75% {
+        transform: translate(40px, 10px) scale(1.05);
+    }
 }
 
 .gradient-bg {
-    background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #6B46C1 100%);
+    background: transparent;
+    position: relative;
 }
 
 .neon-glow {
@@ -151,5 +265,310 @@ body {
 
     100% {
         transform: scale(1);
+    }
+}
+
+/* Black Hole Animation System */
+.black-hole-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+    pointer-events: none;
+    will-change: opacity;
+    transform: translateZ(0); /* Force GPU acceleration */
+}
+
+.black-hole-container.active {
+    opacity: 1;
+}
+
+.black-hole {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 400px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    will-change: transform;
+    transform-style: preserve-3d;
+}
+
+/* Mobile responsive black hole */
+@media (max-width: 768px) {
+    .black-hole {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+/* Central Void */
+.black-hole-void {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 120px;
+    height: 120px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, #000000 0%, #111111 70%, transparent 100%);
+    border-radius: 50%;
+    animation: voidPulse 4s ease-in-out infinite;
+    box-shadow:
+        inset 0 0 50px rgba(0,0,0,0.9),
+        0 0 100px rgba(0,0,0,0.8),
+        0 0 200px rgba(139, 0, 0, 0.3);
+    will-change: box-shadow;
+    transform-style: preserve-3d;
+}
+
+@media (max-width: 768px) {
+    .black-hole-void {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* Event Horizon */
+.event-horizon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 160px;
+    height: 160px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        transparent 0%,
+        transparent 60%,
+        rgba(139, 0, 0, 0.3) 70%,
+        rgba(255, 69, 0, 0.2) 80%,
+        transparent 90%);
+    animation: eventHorizonPulse 6s ease-in-out infinite;
+    will-change: transform, opacity;
+}
+
+@media (max-width: 768px) {
+    .event-horizon {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+@keyframes eventHorizonPulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+/* Accretion Disk */
+.accretion-disk {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    animation: blackHoleRotation 8s linear infinite;
+    will-change: transform;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+.accretion-ring-1 {
+    width: 200px;
+    height: 200px;
+    border: 2px solid transparent;
+    background: conic-gradient(from 0deg,
+        transparent 0%,
+        rgba(255, 140, 0, 0.8) 25%,
+        rgba(255, 69, 0, 0.6) 50%,
+        rgba(139, 0, 0, 0.4) 75%,
+        transparent 100%);
+    border-radius: 50%;
+    animation: blackHoleRotation 6s linear infinite;
+}
+
+.accretion-ring-2 {
+    width: 280px;
+    height: 280px;
+    border: 1px solid transparent;
+    background: conic-gradient(from 45deg,
+        transparent 0%,
+        rgba(255, 165, 0, 0.6) 20%,
+        rgba(255, 99, 71, 0.4) 40%,
+        rgba(178, 34, 34, 0.3) 60%,
+        transparent 80%);
+    border-radius: 50%;
+    animation: blackHoleRotation 10s linear infinite reverse;
+}
+
+.accretion-ring-3 {
+    width: 360px;
+    height: 360px;
+    border: 1px solid transparent;
+    background: conic-gradient(from 90deg,
+        transparent 0%,
+        rgba(255, 215, 0, 0.4) 15%,
+        rgba(255, 140, 0, 0.3) 30%,
+        rgba(205, 92, 92, 0.2) 45%,
+        transparent 60%);
+    border-radius: 50%;
+    animation: blackHoleRotation 14s linear infinite;
+}
+
+@media (max-width: 768px) {
+    .accretion-ring-1 { width: 130px; height: 130px; }
+    .accretion-ring-2 { width: 180px; height: 180px; }
+    .accretion-ring-3 { width: 230px; height: 230px; }
+}
+
+/* Particle System */
+.particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: particleSpiral 6s linear infinite;
+    will-change: transform, opacity;
+}
+
+.particle:nth-child(odd) {
+    animation-duration: 8s;
+    animation-delay: -2s;
+}
+
+.particle:nth-child(3n) {
+    animation-duration: 10s;
+    animation-delay: -4s;
+    background: rgba(255, 140, 0, 0.6);
+}
+
+.particle:nth-child(5n) {
+    animation-duration: 7s;
+    animation-delay: -1s;
+    background: rgba(255, 69, 0, 0.7);
+}
+
+/* Black Hole Animations */
+@keyframes blackHoleRotation {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes particleSpiral {
+    from {
+        transform: rotate(0deg) translateX(300px) rotate(0deg);
+        opacity: 1;
+    }
+    to {
+        transform: rotate(720deg) translateX(50px) rotate(-720deg);
+        opacity: 0;
+    }
+}
+
+@keyframes voidPulse {
+    0%, 100% {
+        box-shadow:
+            inset 0 0 50px rgba(0,0,0,0.9),
+            0 0 100px rgba(0,0,0,0.8);
+    }
+    50% {
+        box-shadow:
+            inset 0 0 80px rgba(0,0,0,1),
+            0 0 150px rgba(0,0,0,1);
+    }
+}
+
+/* Gravitational Lensing Effect */
+.gravitational-lensing {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 500px;
+    height: 500px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: radial-gradient(circle,
+        transparent 0%,
+        transparent 40%,
+        rgba(255, 255, 255, 0.05) 45%,
+        transparent 50%);
+    animation: lensDistortion 12s ease-in-out infinite;
+}
+
+@media (max-width: 768px) {
+    .gravitational-lensing {
+        width: 320px;
+        height: 320px;
+    }
+}
+
+@keyframes lensDistortion {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        filter: blur(0px);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.05);
+        filter: blur(1px);
+    }
+}
+
+/* Content Distortion Effect for Black Hole */
+.black-hole-active .container {
+    transition: filter 1s ease-in-out;
+}
+
+.black-hole-active #problem-section .container {
+    filter: brightness(0.8) contrast(1.1);
+}
+
+/* Money Amount Highlighting in Black Hole Zone */
+.black-hole-active .text-red-500,
+.black-hole-active .text-orange-warning {
+    text-shadow: 0 0 20px currentColor;
+    animation: moneyDrain 3s ease-in-out infinite;
+}
+
+@keyframes moneyDrain {
+    0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+    }
+    50% {
+        transform: scale(0.98);
+        filter: brightness(0.7);
+    }
+}
+
+/* Accessibility: Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .black-hole-container,
+    .accretion-disk,
+    .particle,
+    .black-hole-void,
+    .gravitational-lensing,
+    .event-horizon {
+        animation: none !important;
+    }
+
+    .black-hole-container.active {
+        opacity: 0.3;
+    }
+
+    .black-hole-active .text-red-500,
+    .black-hole-active .text-orange-warning {
+        animation: none !important;
+        text-shadow: none !important;
     }
 }

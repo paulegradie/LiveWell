@@ -32,6 +32,52 @@
 </head>
 
 <body class="bg-dark-bg text-white font-inter text-xl leading-relaxed">
+    <!-- Dynamic Background Orbs -->
+    <div class="dynamic-background">
+        <div class="background-orb orb-1"></div>
+        <div class="background-orb orb-2"></div>
+        <div class="background-orb orb-3"></div>
+        <div class="background-orb orb-4"></div>
+        <div class="background-orb orb-5"></div>
+    </div>
+
+    <!-- Black Hole Animation -->
+    <div class="black-hole-container" id="black-hole-container">
+        <div class="black-hole">
+            <!-- Gravitational Lensing -->
+            <div class="gravitational-lensing"></div>
+
+            <!-- Accretion Disk Rings -->
+            <div class="accretion-disk accretion-ring-3"></div>
+            <div class="accretion-disk accretion-ring-2"></div>
+            <div class="accretion-disk accretion-ring-1"></div>
+
+            <!-- Event Horizon -->
+            <div class="event-horizon"></div>
+
+            <!-- Central Void -->
+            <div class="black-hole-void"></div>
+
+            <!-- Particle System -->
+            <div class="particle" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
+            <div class="particle" style="top: 30%; left: 80%; animation-delay: -1s;"></div>
+            <div class="particle" style="top: 70%; left: 15%; animation-delay: -2s;"></div>
+            <div class="particle" style="top: 85%; left: 60%; animation-delay: -3s;"></div>
+            <div class="particle" style="top: 20%; left: 90%; animation-delay: -0.5s;"></div>
+            <div class="particle" style="top: 60%; left: 5%; animation-delay: -1.5s;"></div>
+            <div class="particle" style="top: 40%; left: 75%; animation-delay: -2.5s;"></div>
+            <div class="particle" style="top: 90%; left: 30%; animation-delay: -3.5s;"></div>
+            <div class="particle" style="top: 15%; left: 50%; animation-delay: -0.8s;"></div>
+            <div class="particle" style="top: 75%; left: 85%; animation-delay: -1.8s;"></div>
+            <div class="particle" style="top: 5%; left: 70%; animation-delay: -2.8s;"></div>
+            <div class="particle" style="top: 55%; left: 25%; animation-delay: -3.8s;"></div>
+            <div class="particle" style="top: 35%; left: 45%; animation-delay: -0.3s;"></div>
+            <div class="particle" style="top: 65%; left: 95%; animation-delay: -1.3s;"></div>
+            <div class="particle" style="top: 25%; left: 10%; animation-delay: -2.3s;"></div>
+            <div class="particle" style="top: 95%; left: 55%; animation-delay: -3.3s;"></div>
+        </div>
+    </div>
+
     <!-- Progress Bar -->
     <div class="fixed top-0 left-0 w-full h-2 bg-gray-800 z-50">
         <div id="progress-bar" class="h-full bg-gradient-to-r from-purple-neon to-cyan-bright transition-all duration-300" style="width: 0%"></div>
@@ -42,7 +88,7 @@
         <!-- Hero Section Container -->
         <div id="hero-section">
             <!-- Hero content will be loaded here -->
-            <div class="min-h-screen gradient-bg flex items-center justify-center">
+            <div class="py-20 gradient-bg flex items-center justify-center">
                 <div class="text-center text-white">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
                     <p>Loading...</p>
@@ -50,12 +96,10 @@
             </div>
         </div>
 
-
-
         <!-- Problem Section Container -->
         <div id="problem-section">
             <!-- Problem content will be loaded here -->
-            <div class="min-h-screen bg-gradient-to-br from-orange-warning/20 to-red-500/20 py-20 flex items-center justify-center">
+            <div class="py-20 flex items-center justify-center">
                 <div class="text-center text-white">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-warning mx-auto mb-4"></div>
                     <p>Loading financial calculators...</p>
@@ -66,7 +110,7 @@
         <!-- Solution Section Container -->
         <div id="solution-section">
             <!-- Solution content will be loaded here -->
-            <div class="min-h-screen bg-gradient-to-br from-green-success/20 to-cyan-bright/20 py-20 flex items-center justify-center">
+            <div class="py-20 flex items-center justify-center">
                 <div class="text-center text-white">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-success mx-auto mb-4"></div>
                     <p>Loading solution...</p>
@@ -77,7 +121,7 @@
         <!-- Paul's Message Section Container -->
         <div id="paul-message-section">
             <!-- Paul's message content will be loaded here -->
-            <div class="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900 py-20 flex items-center justify-center">
+            <div class="py-20 flex items-center justify-center">
                 <div class="text-center text-white">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-neon mx-auto mb-4"></div>
                     <p>Loading message...</p>
@@ -88,7 +132,7 @@
         <!-- Lifestyle Section Container -->
         <div id="lifestyle-section">
             <!-- Lifestyle content will be loaded here -->
-            <div class="min-h-screen bg-gradient-to-br from-green-success/20 to-cyan-bright/20 py-20 flex items-center justify-center">
+            <div class="py-20 flex items-center justify-center">
                 <div class="text-center text-white">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-bright mx-auto mb-4"></div>
                     <p>Loading lifestyle content...</p>
@@ -99,7 +143,7 @@
         <!-- How It Works Section Container -->
         <div id="how-it-works-section">
             <!-- How it works content will be loaded here -->
-            <div class="min-h-screen bg-gray-900 py-20 flex items-center justify-center">
+            <div class="py-20 flex items-center justify-center">
                 <div class="text-center text-white">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-neon mx-auto mb-4"></div>
                     <p>Loading how it works...</p>
@@ -110,7 +154,7 @@
         <!-- Final Choice Section Container -->
         <div id="final-choice-section">
             <!-- Final choice content will be loaded here -->
-            <div class="min-h-screen gradient-bg py-20 flex items-center justify-center">
+            <div class="py-20 gradient-bg flex items-center justify-center">
                 <div class="text-center text-white">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-bright mx-auto mb-4"></div>
                     <p>Loading final choice...</p>
@@ -121,7 +165,7 @@
         <!-- Family Trust Section Container -->
         <div id="family-trust-section">
             <!-- Family trust content will be loaded here -->
-            <div class="bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 py-20 flex items-center justify-center">
+            <div class="py-20 flex items-center justify-center">
                 <div class="text-center text-white">
                     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto mb-4"></div>
                     <p>Loading family trust diagram...</p>

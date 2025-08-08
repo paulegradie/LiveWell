@@ -70,12 +70,13 @@ function initializeApp() {
     if (typeof initializeProgressBar === 'function') initializeProgressBar();
     if (typeof initializeAnimations === 'function') initializeAnimations();
     if (typeof initializeComparison === 'function') initializeComparison();
-    if (typeof initializeMermaidDiagram === 'function') initializeMermaidDiagram();
-    if (typeof initializeFamilyTrustDiagram === 'function') initializeFamilyTrustDiagram();
+    // if (typeof initializeMermaidDiagram === 'function') initializeMermaidDiagram(); // Commented out for testing
+    // if (typeof initializeFamilyTrustDiagram === 'function') initializeFamilyTrustDiagram(); // Commented out for testing
     if (typeof initializeCounters === 'function') initializeCounters();
     if (typeof initializeWealthChart === 'function') initializeWealthChart();
     if (typeof initializeTableHoverEffects === 'function') initializeTableHoverEffects();
     if (typeof initializeVisualEffects === 'function') initializeVisualEffects();
     if (typeof initializeApartmentCalculator === 'function') initializeApartmentCalculator();
     if (typeof initializeIrajCalculator === 'function') initializeIrajCalculator();
+    if (typeof initializeBlackHole === 'function') initializeBlackHole();
 }
