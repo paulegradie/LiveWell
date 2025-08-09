@@ -450,16 +450,10 @@ function formatCurrency(amount) {
 
 // Add some visual feedback for interactive elements (moved to main initialization)
 function initializeVisualEffects() {
-    // Add pulse animation to important numbers
-    const importantNumbers = document.querySelectorAll('.text-6xl, .text-7xl');
+    // Always-on pulse for key numbers
+    const importantNumbers = document.querySelectorAll('.counter, .big-number, .text-6xl, .text-7xl');
     importantNumbers.forEach(number => {
-        number.addEventListener('mouseenter', function() {
-            this.classList.add('animate-pulse');
-        });
-
-        number.addEventListener('mouseleave', function() {
-            this.classList.remove('animate-pulse');
-        });
+        number.classList.add('animate-pulse');
     });
 }
 

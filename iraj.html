@@ -6,21 +6,27 @@
   <title>Iraj’s Journey</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
 </head>
-<body class="bg-white text-gray-800 font-inter">
+<body class="text-gray-100 font-inter">
+  <div id="progress-bar" class="fixed top-0 left-0 h-1 w-0 z-50 bg-gradient-to-r from-[#cba6f7] via-[#89dceb] to-[#a6e3a1] transition-[width] duration-300"></div>
+  <div class="dynamic-background">
+    <div class="background-orb orb-1"></div>
+    <div class="background-orb orb-2"></div>
+  </div>
   <!-- Navigation bar linking to other journeys -->
-  <nav class="bg-gray-100 shadow">
+  <nav class="sticky top-0 bg-white/5 ring-1 ring-white/10 backdrop-blur z-40">
     <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center p-4">
-      <a href="index.html" class="font-bold text-gray-800 text-lg">Home</a>
+      <a href="index.html" class="font-bold text-gray-100 text-lg">Home</a>
       <div class="flex space-x-4">
-        <a href="mahnaz.html" class="text-blue-600 hover:underline font-medium">Mahnaz</a>
-        <a href="iraj.html" class="text-blue-600 hover:underline font-medium">Iraj</a>
-        <a href="paul-ana-lucas.html" class="text-blue-600 hover:underline font-medium">Paul &amp; Ana</a>
-        <a href="trust.html" class="text-blue-600 hover:underline font-medium">Trust</a>
+        <a href="mahnaz.html" class="text-[#89b4fa] hover:underline font-medium">Mahnaz</a>
+        <a href="iraj.html" class="text-[#89b4fa] hover:underline font-medium">Iraj</a>
+        <a href="paul-ana-lucas.html" class="text-[#89b4fa] hover:underline font-medium">Paul &amp; Ana</a>
+        <a href="trust.html" class="text-[#89b4fa] hover:underline font-medium">Trust</a>
       </div>
     </div>
   </nav>
-  <article class="max-w-4xl mx-auto p-6">
+  <article class="max-w-4xl mx-auto p-6 rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur">
     <h1 class="text-3xl md:text-4xl font-extrabold mt-4 mb-6">Iraj’s Journey</h1>
     <!-- Independent Living Section -->
     <section class="mb-10">
@@ -68,19 +74,17 @@
       <div class="space-y-8">
         <figure>
           <img src="img/iraj_allowance.png" alt="Iraj monthly allowance projection" class="w-full border border-gray-200 rounded-lg">
-          <figcaption class="text-sm mt-2 text-gray-600">Iraj’s allowance begins at $1,800 per month and gradually increases to $2,500, giving him
+          <figcaption class="text-sm mt-2 text-gray-300">Iraj’s allowance begins at $1,800 per month and gradually increases to $2,500, giving him
             greater spending power as the trust portfolio expands. Housing and major bills are paid by the trust.</figcaption>
         </figure>
         <figure>
           <img src="img/combined_allowances_surplus.png" alt="Combined allowances and trust surplus projection" class="w-full border border-gray-200 rounded-lg">
-          <figcaption class="text-sm mt-2 text-gray-600">This chart shows all three allowances alongside the trust’s retained surplus, emphasising
+          <figcaption class="text-sm mt-2 text-gray-300">This chart shows all three allowances alongside the trust’s retained surplus, emphasising
             that everyone’s income grows while the trust keeps enough cash to fund future acquisitions.</figcaption>
         </figure>
       </div>
     </section>
-
-
-
   </article>
+  <script src="script.js"></script>
 </body>
 </html>

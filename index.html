@@ -7,8 +7,14 @@
   <!-- Use Tailwind for rapid styling -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 text-gray-800 font-inter">
+<body class="text-gray-100 font-inter">
+  <div id="progress-bar" class="fixed top-0 left-0 h-1 w-0 z-50 bg-gradient-to-r from-[#cba6f7] via-[#89dceb] to-[#a6e3a1] transition-[width] duration-300"></div>
+  <div class="dynamic-background">
+    <div class="background-orb orb-1"></div>
+    <div class="background-orb orb-2"></div>
+  </div>
   <div class="min-h-screen flex flex-col items-center justify-center p-8">
     <h1 class="text-4xl md:text-5xl font-extrabold mb-8 text-center">Choose Your Journey</h1>
     <p class="max-w-3xl text-center text-lg mb-10">
@@ -17,31 +23,32 @@
     </p>
     <!-- Grid for the three persona journeys -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl">
-      <a href="mahnaz.html" class="block rounded-lg border border-gray-300 p-6 shadow-md hover:shadow-lg transition">
+      <a href="mahnaz.html" class="block rounded-xl bg-white/5 ring-1 ring-white/10 p-6 hover:bg-white/10 transition">
         <h2 class="text-2xl font-bold mb-2">Mahnaz</h2>
-        <p class="text-gray-600">Discover how Mahnaz’s life could unfold with or without the family trust.</p>
+        <p class="text-gray-300">Discover how Mahnaz’s life could unfold with or without the family trust.</p>
       </a>
-      <a href="iraj.html" class="block rounded-lg border border-gray-300 p-6 shadow-md hover:shadow-lg transition">
+      <a href="iraj.html" class="block rounded-xl bg-white/5 ring-1 ring-white/10 p-6 hover:bg-white/10 transition">
         <h2 class="text-2xl font-bold mb-2">Iraj</h2>
-        <p class="text-gray-600">Explore the options for Iraj’s future and financial security.</p>
+        <p class="text-gray-300">Explore the options for Iraj’s future and financial security.</p>
       </a>
-      <a href="paul-ana-lucas.html" class="block rounded-lg border border-gray-300 p-6 shadow-md hover:shadow-lg transition">
+      <a href="paul-ana-lucas.html" class="block rounded-xl bg-white/5 ring-1 ring-white/10 p-6 hover:bg-white/10 transition">
         <h2 class="text-xl md:text-2xl font-bold mb-2">Paul, Ana & Lucas</h2>
-        <p class="text-gray-600">See how joining the trust builds wealth and freedom for the family.</p>
+        <p class="text-gray-300">See how joining the trust builds wealth and freedom for the family.</p>
       </a>
 
     </div>
     <!-- Put the trust explanation card on its own row for emphasis -->
     <div class="mt-10 w-full max-w-5xl space-y-4">
-      <a href="trust.html" class="block w-full rounded-lg border border-gray-300 p-6 shadow-md hover:shadow-lg transition">
+      <a href="trust.html" class="block w-full rounded-xl bg-white/5 ring-1 ring-white/10 p-6 hover:bg-white/10 transition">
         <h2 class="text-2xl font-bold">How the Trust Works</h2>
       </a>
-      <a href="opt-out.html" class="block w-full rounded-lg border border-gray-300 p-6 shadow-md hover:shadow-lg transition">
+      <a href="opt-out.html" class="block w-full rounded-xl bg-white/5 ring-1 ring-white/10 p-6 hover:bg-white/10 transition">
         <h2 class="text-2xl font-bold">What happens if you don’t join the trust?</h2>
       </a>
     </div>
 
 
   </div>
+  <script src="script.js"></script>
 </body>
 </html>

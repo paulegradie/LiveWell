@@ -6,88 +6,170 @@
   <title>Mahnaz’s Journey</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link href="styles.css" rel="stylesheet">
 </head>
-<body class="bg-white text-gray-800 font-inter">
+<body class="text-gray-100 font-inter">
+  <div id="progress-bar" class="fixed top-0 left-0 h-1 w-0 z-50 bg-gradient-to-r from-[#cba6f7] via-[#89dceb] to-[#a6e3a1] transition-[width] duration-300"></div>
+  <div class="dynamic-background">
+    <div class="background-orb orb-1"></div>
+    <div class="background-orb orb-2"></div>
+  </div>
   <!-- Navigation bar linking to other journeys -->
-  <nav class="bg-gray-100 shadow">
+  <nav class="sticky top-0 bg-white/5 ring-1 ring-white/10 backdrop-blur z-40">
     <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center p-4">
-      <a href="index.html" class="font-bold text-gray-800 text-lg">Home</a>
+      <a href="index.html" class="font-bold text-gray-100 text-lg">Home</a>
       <div class="flex space-x-4">
-        <a href="mahnaz.html" class="text-blue-600 hover:underline font-medium">Mahnaz</a>
-        <a href="iraj.html" class="text-blue-600 hover:underline font-medium">Iraj</a>
-        <a href="paul-ana-lucas.html" class="text-blue-600 hover:underline font-medium">Paul &amp; Ana</a>
-        <a href="trust.html" class="text-blue-600 hover:underline font-medium">Trust</a>
+        <a href="mahnaz.html" class="text-[#89b4fa] hover:underline font-medium">Mahnaz</a>
+        <a href="iraj.html" class="text-[#89b4fa] hover:underline font-medium">Iraj</a>
+        <a href="paul-ana-lucas.html" class="text-[#89b4fa] hover:underline font-medium">Paul &amp; Ana</a>
+        <a href="trust.html" class="text-[#89b4fa] hover:underline font-medium">Trust</a>
       </div>
     </div>
   </nav>
-  <article class="max-w-4xl mx-auto p-6">
+  <article class="max-w-4xl mx-auto p-6 rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur">
     <h1 class="text-3xl md:text-4xl font-extrabold mt-4 mb-6">Mahnaz’s Journey</h1>
-    <!-- Independent Retirement Section -->
-    <section class="mb-10">
-      <h2 class="text-2xl font-bold mb-3">Option 1: Independent Retirement</h2>
-      <p class="mb-4">If Mahnaz decides to sell the family home, buy an apartment and live off her
-        superannuation and pension, this is what her life could look like:</p>
-      <ul class="list-disc pl-6 space-y-2">
-        <li>She would receive roughly <strong>$840k</strong> from her share of the house sale.</li>
-        <li>She’d need to purchase an apartment outright and cover ongoing costs like council rates, body corporate fees, maintenance and insurance.</li>
-        <li>Her income would come from her <strong>$250k</strong> superannuation balance and her government pension (~$550/week).</li>
-        <li>With costs rising and income fixed, her savings would slowly diminish over time.</li>
-        <li>She would be responsible for paying all bills, organising maintenance and managing her own tax paperwork.</li>
-      </ul>
-      <p class="mt-4">This path offers independence, but her income never grows. Any unexpected expense — a
-        medical bill or helping family overseas — comes directly from her shrinking nest egg.</p>
+    <section id="overview" class="mb-8">
+      <p class="text-lg text-gray-200">Let’s look at two simple paths and what each means for your day-to-day life. Then we’ll show the exact steps to take if you choose the Trust.</p>
+      <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+        <a href="#options" class="rounded-full bg-white/5 ring-1 ring-white/10 px-3 py-1 text-center">1. Options</a>
+        <a href="#steps" class="rounded-full bg-white/5 ring-1 ring-white/10 px-3 py-1 text-center">2. Steps</a>
+        <a href="#outcomes" class="rounded-full bg-white/5 ring-1 ring-white/10 px-3 py-1 text-center">3. What you get</a>
+        <a href="#family" class="rounded-full bg-white/5 ring-1 ring-white/10 px-3 py-1 text-center">4. How it helps family</a>
+      </div>
     </section>
-    <!-- Joining the Trust Section -->
-    <section class="mb-10">
-      <h2 class="text-2xl font-bold mb-3">Option 2: Joining the Family Trust</h2>
-      <p class="mb-4">By pooling her proceeds into the family trust, Mahnaz unlocks a growing income
-        and complete peace of mind:</p>
-      <ul class="list-disc pl-6 space-y-2">
-        <li>She contributes her sale proceeds into the trust and keeps <strong>$50k</strong> in her personal account for comfort.</li>
-        <li>She stays with Jameleh for a few months while the initial buffer is built, then moves into a comfortable apartment with rent and utilities paid by the trust.</li>
-        <li>She receives a monthly allowance that starts at <strong>$2,500</strong> and gradually rises to <strong>$3,500</strong> per month as the trust grows.</li>
-        <li>Her allowance is purely for personal living expenses – the trust handles rent, rates, insurance, tax filings and major repairs.</li>
-        <li>As a beneficiary, she always has visibility into trust accounts and can request extra funds for emergencies or special trips.</li>
-        <li>The trust’s investments generate increasing cash flow each year, enabling bigger family travel budgets, business‑class flights, new phones or tablets and ongoing support for Lucas’s education.</li>
-      </ul>
-      <p class="mt-4">This path protects Mahnaz’s savings, provides ever‑increasing income and eliminates the stress of managing property. She remains in control — deciding how involved she wants to be — while enjoying a simpler, more abundant life.</p>
+    <section id="options" class="mb-10">
+      <h2 class="text-2xl font-bold mb-3">1. Options: These are your retirement choices</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur p-6">
+          <div class="text-sm font-semibold text-[#cba6f7]">Option 1 · Independent</div>
+          <h3 class="text-2xl font-bold mt-1">Own apartment, fixed income</h3>
+          <ul class="mt-3 space-y-2 text-gray-300">
+            <li>~$840k from house sale to purchase apartment</li>
+            <li>Pension + $250k super; income stays flat</li>
+            <li>About $3,241 per month (~$38,900/year) to live on; no growth</li>
+            <li>No trust participation or compounding; purchasing power declines with inflation</li>
+            <li>You handle rates, body corp, insurance, repairs</li>
+            <li>Surprise bills (medical, repairs, family help) are yours alone and eat into super</li>
+            <li>You will depend on Jameleh and Amir for large expenses (like a Europe trip, which Ana could not afford)</li>
+            <li>Savings diminish over time; inflation reduces purchasing power</li>
+            <li>Sets Paul &amp; Ana back by decades; slows allowances for everyone</li>
+          </ul>
+          <p class="mt-2 text-[#fab387] font-semibold">You will be comfortable, but it comes at the expense of others. You get peace of mind, but life gets harder for everyone else.</p>
+        </div>
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 backdrop-blur p-6">
+          <div class="text-sm font-semibold text-[#a6e3a1]">Option 2 · Family Trust</div>
+          <h3 class="text-2xl font-bold mt-1">Stable home, growing income</h3>
+          <ul class="mt-3 space-y-2 text-gray-300">
+            <li>Keep $50k personal; rest joins the trust</li>
+            <li>Trust pays rent, utilities, insurance and tax</li>
+            <li>Allowance starts at $2,500/mo → rises toward $3,500</li>
+            <li>Trust pays for emergencies and international trips—without touching your savings</li>
+            <li>You can afford your own large expenses (overseas trips, emergencies) without asking others</li>
+            <li>Everyone has more to spend on themselves because you aren’t a burden</li>
+            <li>All funded by growing property income — not by Paul working more</li>
+          </ul>
+          <p class="mt-3 text-gray-400">Less admin, more peace. Income grows over time while capital is protected — and it comes from property income, not from Paul.</p>
+          <p class="mt-2 text-[#a6e3a1] font-semibold">Very, very comfortable for you — more than Option 1 — and you make life easier for Paul and Ana. A gift that’s invaluable.</p>
+        </div>
+      </div>
     </section>
-    <!-- Timeline Section -->
-    <section class="mb-10">
-      <h2 class="text-2xl font-bold mb-3">Timeline &amp; Experience</h2>
-      <p class="mb-4">After the house sells, the trust pays off all debts and builds a cash buffer. Over the
-        next few years it purchases high‑yield rental properties that produce steady income:</p>
-      <ul class="list-disc pl-6 space-y-2">
-        <li><strong>Months 0–3:</strong> Sale settles; Mahnaz stays with Jameleh while we secure a rental apartment and build the trust buffer.</li>
-        <li><strong>Month 4:</strong> She moves into her new apartment and begins receiving her monthly allowance.</li>
-        <li><strong>Years 1–3:</strong> The trust buys two to three investment properties; her allowance increases gradually.</li>
-        <li><strong>Years 4–10:</strong> The portfolio snowballs, enabling upgrades like business‑class travel, better devices and regular gifts to family abroad while the principal continues to grow.</li>
-      </ul>
-      <p class="mt-4">Throughout this journey Mahnaz never worries about surprise bills or downturns — the trust’s liquidity buffer and professional advisers ensure stability. Her legacy helps build a better future for Lucas while securing her own comfort.</p>
+    <section id="steps" class="mb-10">
+      <h2 class="text-2xl font-bold mb-3">2. Steps: Exact steps to join the Trust</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+          <div class="text-sm font-semibold text-[#cba6f7]">Months 0–3</div>
+          <h3 class="text-lg font-bold mt-1">Settle sale · Build buffer</h3>
+          <ul class="mt-2 list-disc pl-5 text-gray-300 space-y-1">
+            <li>House sale settles; keep $50k personally</li>
+            <li>Stay with Jameleh while the trust sets up the apartment</li>
+            <li>Trust clears debts and builds a safety buffer</li>
+          </ul>
+          <div class="mt-3 text-[#a6e3a1]">You get: zero admin, clear plan, money in your account</div>
+        </div>
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+          <div class="text-sm font-semibold text-[#89dceb]">Month 4</div>
+          <h3 class="text-lg font-bold mt-1">Move in · Allowance starts</h3>
+          <ul class="mt-2 list-disc pl-5 text-gray-300 space-y-1">
+            <li>Trust pays rent, utilities and insurance</li>
+            <li>Receive your monthly allowance ($2,500+)</li>
+            <li>Keep $50k personal for comfort and gifts</li>
+          </ul>
+          <div class="mt-3 text-[#a6e3a1]">You get: stable home, money you control, no bills</div>
+        </div>
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+          <div class="text-sm font-semibold text-[#fab387]">Years 1–3</div>
+          <h3 class="text-lg font-bold mt-1">Invest · Income grows</h3>
+          <ul class="mt-2 list-disc pl-5 text-gray-300 space-y-1">
+            <li>Trust buys 2–3 rental properties</li>
+            <li>Allowance steps up as cash flow grows</li>
+            <li>Emergency funds and trip budgets available</li>
+          </ul>
+          <div class="mt-3 text-[#a6e3a1]">You get: rising allowance; bigger trips and gifts</div>
+        </div>
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+          <div class="text-sm font-semibold text-[#b4befe]">Years 4–10</div>
+          <h3 class="text-lg font-bold mt-1">Comfort · Dignity · Freedom</h3>
+          <ul class="mt-2 list-disc pl-5 text-gray-300 space-y-1">
+            <li>Business-class travel and better devices</li>
+            <li>Support for family overseas, without stress</li>
+            <li>Capital preserved; income keeps rising</li>
+          </ul>
+          <div class="mt-3 text-[#a6e3a1]">You get: security now and a happier life</div>
+        </div>
+      </div>
+    </section>
+    <section id="outcomes" class="mb-10">
+      <h2 class="text-2xl font-bold mb-3">3. What you get: Why this feels good</h2>
+      <div class="grid md:grid-cols-3 gap-4">
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+          <div class="text-sm font-semibold text-[#a6e3a1]">Less stress</div>
+          <p class="text-gray-300 mt-1">No more bills or property admin. The trust pays rent, utilities, insurance and tax.</p>
+          <p class="text-gray-300 mt-1">We can also buy your property outright within 3–5 years.</p>
+        </div>
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+          <div class="text-sm font-semibold text-[#89dceb]">Money you control</div>
+          <p class="text-gray-300 mt-1">Allowance each month for groceries, phone, gifts and outings—plus your own $50k for comfort.</p>
+        </div>
+        <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+          <div class="text-sm font-semibold text-[#cba6f7]">Freedom to enjoy</div>
+          <p class="text-gray-300 mt-1">Travel, better devices, help for family overseas—without touching your capital.</p>
+        </div>
+      </div>
     </section>
 
+    <section id="family" class="mb-10">
+      <h2 class="text-2xl font-bold mb-3">4. How your choice unlocks the future for others</h2>
+      <div class="rounded-xl bg-white/5 ring-1 ring-white/10 p-5">
+        <ul class="list-disc pl-5 text-gray-300 space-y-1">
+          <li>Faster debt clearance → more surplus for everyone</li>
+          <li>Earlier property purchases → rising allowances for Paul &amp; Ana and Iraj</li>
+          <li>Stable base → more support for travel, education and family overseas</li>
+        </ul>
+        <p class="text-gray-400 mt-3">Your participation makes the engine work. Everyone benefits—and your comfort comes first.</p>
+      </div>
+    </section>
     <!-- Projections Section: Income and Trust Growth -->
     <section class="mb-10">
-      <h2 class="text-2xl font-bold mb-3">Income &amp; Trust Growth Projections</h2>
+      <h2 class="text-2xl font-bold mb-3">5. Income &amp; Trust Growth Projections</h2>
       <p class="mb-4">To help visualise how Mahnaz benefits from joining the family trust, the following charts show her
         projected monthly allowance and how the trust reinvests surplus income over the next decade.</p>
       <div class="space-y-8">
         <figure>
           <img src="img/mahnaz_allowance.png" alt="Mahnaz monthly allowance projection" class="w-full border border-gray-200 rounded-lg">
-          <figcaption class="text-sm mt-2 text-gray-600">Mahnaz’s monthly allowance starts at $2,500 and gradually increases to $3,500 as the trust
+          <figcaption class="text-sm mt-2 text-gray-300">Mahnaz’s monthly allowance starts at $2,500 and gradually increases to $3,500 as the trust
             acquires more properties and income grows. Her housing is fully paid for by the trust, so this allowance
             covers only her day‑to‑day spending.</figcaption>
         </figure>
         <figure>
           <img src="img/combined_allowances_surplus.png" alt="Combined allowances and trust surplus projection" class="w-full border border-gray-200 rounded-lg">
-          <figcaption class="text-sm mt-2 text-gray-600">This combined chart illustrates how the trust manages cash: Paul &amp; Ana, Mahnaz and Iraj
+          <figcaption class="text-sm mt-2 text-gray-300">This combined chart illustrates how the trust manages cash: Paul &amp; Ana, Mahnaz and Iraj
             receive growing allowances, while surplus funds (in red) are retained to purchase additional properties. The
             upward trend in retained surplus highlights the trust’s long‑term sustainability.</figcaption>
         </figure>
       </div>
     </section>
 
-
   </article>
+  <script src="script.js"></script>
 </body>
 </html>
