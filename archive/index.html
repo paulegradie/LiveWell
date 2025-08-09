@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Financial Futures</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'purple-primary': '#6B46C1',
+                        'purple-neon': '#7C3AED',
+                        'cyan-bright': '#06B6D4',
+                        'green-success': '#10B981',
+                        'orange-warning': '#F59E0B',
+                        'dark-bg': '#0F172A'
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-dark-bg text-white font-inter text-xl leading-relaxed">
+    <!-- Dynamic Background Orbs -->
+    <div class="dynamic-background">
+        <div class="background-orb orb-1"></div>
+        <div class="background-orb orb-2"></div>
+        <div class="background-orb orb-3"></div>
+        <div class="background-orb orb-4"></div>
+        <div class="background-orb orb-5"></div>
+    </div>
+
+
+
+    <!-- Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-2 bg-gray-800 z-50">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-purple-neon to-cyan-bright transition-all duration-300" style="width: 0%"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section Container -->
+        <div id="hero-section">
+            <!-- Hero content will be loaded here -->
+            <div class="py-20 gradient-bg flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                    <p>Loading...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Problem Section Container -->
+        <div id="problem-section">
+            <!-- Problem content will be loaded here -->
+            <div class="py-20 flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-warning mx-auto mb-4"></div>
+                    <p>Loading financial calculators...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Solution Section Container -->
+        <div id="solution-section">
+            <!-- Solution content will be loaded here -->
+            <div class="py-20 flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-success mx-auto mb-4"></div>
+                    <p>Loading solution...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paul's Message Section Container -->
+        <div id="paul-message-section">
+            <!-- Paul's message content will be loaded here -->
+            <div class="py-20 flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-neon mx-auto mb-4"></div>
+                    <p>Loading message...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section Container -->
+        <div id="how-it-works-section">
+            <!-- How it works content will be loaded here -->
+            <div class="py-20 flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-neon mx-auto mb-4"></div>
+                    <p>Loading how it works...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Family Trust Section Container -->
+        <div id="family-trust-section">
+            <!-- Family trust content will be loaded here -->
+            <div class="py-20 flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-400 mx-auto mb-4"></div>
+                    <p>Loading family trust diagram...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lifestyle Section Container -->
+        <div id="lifestyle-section">
+            <!-- Lifestyle content will be loaded here -->
+            <div class="py-20 flex items-center justify-center">
+                <div class="text-center text-white">
+                    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-bright mx-auto mb-4"></div>
+                    <p>Loading lifestyle content...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+
+    <!-- Load section loader and main script -->
+    <script src="section-loader.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

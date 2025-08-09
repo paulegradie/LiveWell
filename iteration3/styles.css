@@ -1,0 +1,269 @@
+/* Financial Strategy Planning - Custom Styles */
+
+/* Dynamic Background System - Catppuccin Mocha Palette */
+:root {
+    --orb-primary: #f38ba8;    /* Catppuccin Red */
+    --orb-secondary: #a6e3a1;  /* Catppuccin Green */
+    --orb-accent: #fab387;     /* Catppuccin Peach */
+    --orb-opacity: 0.4;
+
+    /* Catppuccin Mocha Color Palette */
+    --ctp-rosewater: #f5e0dc;
+    --ctp-flamingo: #f2cdcd;
+    --ctp-pink: #f5c2e7;
+    --ctp-mauve: #cba6f7;
+    --ctp-red: #f38ba8;
+    --ctp-maroon: #eba0ac;
+    --ctp-peach: #fab387;
+    --ctp-yellow: #f9e2af;
+    --ctp-green: #a6e3a1;
+    --ctp-teal: #94e2d5;
+    --ctp-sky: #89dceb;
+    --ctp-sapphire: #74c7ec;
+    --ctp-blue: #89b4fa;
+    --ctp-lavender: #b4befe;
+}
+
+/* Tailwind Configuration */
+body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0f;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Dynamic Background Orbs */
+.dynamic-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    overflow: hidden;
+}
+
+.background-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: var(--orb-opacity);
+    animation: float 15s ease-in-out infinite;
+    transition: all 3s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform, background;
+}
+
+.orb-1 {
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, var(--orb-primary) 0%, transparent 70%);
+    top: -200px;
+    left: -200px;
+    animation-duration: 12s;
+    animation-delay: 0s;
+}
+
+.orb-2 {
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, var(--orb-secondary) 0%, transparent 70%);
+    top: 20%;
+    right: -300px;
+    animation-duration: 18s;
+    animation-delay: 3s;
+}
+
+.orb-3 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, var(--orb-accent) 0%, transparent 70%);
+    bottom: 10%;
+    left: 10%;
+    animation-duration: 14s;
+    animation-delay: 6s;
+}
+
+.orb-4 {
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, var(--orb-primary) 0%, transparent 70%);
+    top: 60%;
+    right: 20%;
+    animation-duration: 16s;
+    animation-delay: 2s;
+}
+
+.orb-5 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, var(--orb-secondary) 0%, transparent 70%);
+    bottom: -100px;
+    right: -150px;
+    animation-duration: 20s;
+    animation-delay: 8s;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translate(0, 0) scale(1);
+    }
+    25% {
+        transform: translate(30px, -40px) scale(1.1);
+    }
+    50% {
+        transform: translate(-20px, 20px) scale(0.9);
+    }
+    75% {
+        transform: translate(40px, 10px) scale(1.05);
+    }
+}
+
+.gradient-bg {
+    background: transparent;
+    position: relative;
+}
+
+.neon-glow {
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.5);
+}
+
+.animate-counter {
+    transition: all 0.5s ease-in-out;
+}
+
+.section-fade {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.section-fade.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Slider Styles */
+.slider {
+    -webkit-appearance: none;
+    background: linear-gradient(to right, #EF4444 0%, #F59E0B 50%, #10B981 100%);
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 3px solid #6B46C1;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 3px solid #6B46C1;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Small Slider Styles */
+.slider-small {
+    -webkit-appearance: none;
+    appearance: none;
+    background: linear-gradient(to right, #EF4444 0%, #F59E0B 50%, #10B981 100%);
+}
+
+.slider-small::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2px solid #8B5CF6;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.slider-small::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 2px solid #8B5CF6;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Prevent horizontal overflow */
+html,
+body {
+    overflow-x: hidden;
+}
+
+/* Ensure all containers are responsive */
+* {
+    box-sizing: border-box;
+}
+
+/* Animated highlight text */
+.animated-highlight {
+    background: linear-gradient(45deg, #F59E0B, #EF4444, #10B981, #06B6D4, #8B5CF6, #F59E0B);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: colorWave 3s ease-in-out infinite, textPulse 2s ease-in-out infinite alternate;
+    font-weight: 800;
+    text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+@keyframes colorWave {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes textPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.02);
+    }
+}
+
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+
+    25% {
+        transform: scale(1.2);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    75% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
